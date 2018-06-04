@@ -1,0 +1,61 @@
+<TransportDefinition name="SMB Consumer" description="Pluggable transport which consumes messages from SMB shares." available="true">
+        <Class>com.axway.gps.PluggableSMBTransport</Class>
+        <Usages>
+                <Consume>
+                        <Integration />
+                        <RawTrading />
+                </Consume>
+        </Usages>
+        <SettingDefinitions>
+                <SettingDefinition name="SMB Host" defaultValue="" description="IP-Address or Hostname" type="string" required="true" encrypt="false" mask="false"/>
+                <SettingDefinition name="SMB Share" defaultValue="" description="SMB Share. Illustrative example: Folder\PickupFolder" type="string" required="true" encrypt="true" mask="false"/>
+                <SettingDefinition name="Filter Type" defaultValue="glob" description="Pattern type for matching file names" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                                <SelectionItem>glob</SelectionItem>
+                                <SelectionItem>regex</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Filter" defaultValue="*" description="Filter pattern to download remote files" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Domain User" defaultValue="" description="Valid domain user" encrypt="false" mask="false" required="true" type="string" />
+                <SettingDefinition name="Domain Password" defaultValue="" description="Password for domain user" encrypt="true" mask="true" required="true" type="string" />
+                <SettingDefinition name="Domain" defaultValue="" description="Windows Domain" encrypt="false" mask="false" required="true" type="string" />
+ 				
+        </SettingDefinitions>
+        <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="pickup" />
+        </ConstantSettings>
+</TransportDefinition>
+
+
+<TransportDefinition name="SMB Producer" description="Pluggable transport which produces messages to SMB shares." available="true">
+        <Class>com.axway.gps.PluggableSMBTransport</Class>
+        <Usages>
+                <Produce>
+                        <Integration />
+                        <RawTrading />
+                </Produce>
+        </Usages>
+        <SettingDefinitions>
+                <SettingDefinition name="SMB Host" defaultValue="" description="IP-Address or Hostname" type="string" required="true" encrypt="false" mask="false"/>
+                <SettingDefinition name="SMB Share" defaultValue="" description="SMB Share. Illustrative example: Folder\DeliveryFolder" type="string" required="true" encrypt="true" mask="false"/>
+               <SettingDefinition name="Create Folder" description="Create delivery folder if it doesn't exist" encrypt="false" mask="false" required="true" type="string" defaultValue="true">
+                        <SelectionList>
+                                <SelectionItem>true</SelectionItem>
+                                <SelectionItem>false</SelectionItem>
+                        </SelectionList>
+               </SettingDefinition>
+               <SettingDefinition name="Overwrite" description="Overwrite existing files" encrypt="false" mask="false" required="true" type="string" defaultValue="false">
+                        <SelectionList>
+                                <SelectionItem>true</SelectionItem>
+                                <SelectionItem>false</SelectionItem>
+                        </SelectionList>
+               </SettingDefinition>
+                <SettingDefinition name="Domain User" defaultValue="" description="Valid domain user" encrypt="false" mask="false" required="true" type="string" />
+                <SettingDefinition name="Domain Password" defaultValue="" description="Password for domain user" encrypt="true" mask="true" required="true" type="string" />
+                <SettingDefinition name="Domain" defaultValue="" description="Windows Domain" encrypt="false" mask="false" required="true" type="string" />
+         </SettingDefinitions>
+         
+        <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="delivery" />
+        </ConstantSettings>
+</TransportDefinition>

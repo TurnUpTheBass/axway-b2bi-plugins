@@ -1,0 +1,109 @@
+<TransportDefinition name="S3 Consumer" description="Pluggable transport which consumes messages from S3 Buckets / Folders." available="true">
+        <Class>com.axway.gps.PluggableS3Transport</Class>
+        <Usages>
+                <Consume>
+                        <Integration />
+                        <RawTrading />
+                </Consume>
+        </Usages>
+        <SettingDefinitions>
+                <SettingDefinition name="Access Key" defaultValue="" description="AWS Access Key" type="string" required="true" encrypt="false" mask="false"/>
+                <SettingDefinition name="Secret Key" defaultValue="" description="AWS Secret Key" type="string" required="true" encrypt="true" mask="true"/>
+                <SettingDefinition name="AWS Region" defaultValue="us-west-1" description="Select AWS region to reduce latency" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                               <SelectionItem>us-east-2</SelectionItem>
+                               <SelectionItem>us-east-1</SelectionItem>
+                               <SelectionItem>us-west-1</SelectionItem>
+                               <SelectionItem>us-west-2</SelectionItem>
+                               <SelectionItem>ap-south-1</SelectionItem>
+                               <SelectionItem>ap-northeast-2</SelectionItem>
+                               <SelectionItem>ap-northeast-3</SelectionItem>
+                               <SelectionItem>ap-southeast-1</SelectionItem>
+                               <SelectionItem>ap-southeast-2</SelectionItem>
+                               <SelectionItem>ap-northeast-1</SelectionItem>
+                               <SelectionItem>ca-central-1</SelectionItem>
+                               <SelectionItem>cn-north-1</SelectionItem>
+                               <SelectionItem>eu-central-1</SelectionItem>
+                               <SelectionItem>eu-west-1</SelectionItem>
+                               <SelectionItem>eu-west-2</SelectionItem>
+                               <SelectionItem>eu-west-3</SelectionItem>
+                               <SelectionItem>sa-east-1</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Bucket" defaultValue="" description="Bucket name" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\PickupFolder" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Filter Type" defaultValue="glob" description="Pattern type for matching file names" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                                <SelectionItem>glob</SelectionItem>
+                                <SelectionItem>regex</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Filter" defaultValue="*" description="Filter pattern to download remote files" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Use Proxy" description="Use Proxy for pickup exchanges" encrypt="false" mask="false" required="true" type="string" defaultValue="false">
+                        <SelectionList>
+                                <SelectionItem>true</SelectionItem>
+                                <SelectionItem>false</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Proxy Host" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Port" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Username" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Password" defaultValue="" description="" type="string" required="false" encrypt="true" mask="true"/>
+				
+        </SettingDefinitions>
+        <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="pickup" />
+        </ConstantSettings>
+</TransportDefinition>
+
+
+<TransportDefinition name="S3 Producer" description="Pluggable transport which produces messages to S3 Buckets / Folders." available="true">
+        <Class>com.axway.gps.PluggableS3Transport</Class>
+        <Usages>
+                <Produce>
+                        <Integration />
+                        <RawTrading />
+                </Produce>
+        </Usages>
+        <SettingDefinitions>
+               <SettingDefinition name="Access Key" defaultValue="" description="IP/Address or Hostname" type="string" required="true" encrypt="false" mask="false"/>
+                 <SettingDefinition name="Secret Key" defaultValue="" description="AWS Secret Key" type="string" required="true" encrypt="true" mask="true"/>
+               <SettingDefinition name="AWS Region" defaultValue="us-west-1" description="Select AWS region to reduce latency" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                               <SelectionItem>us-east-2</SelectionItem>
+                               <SelectionItem>us-east-1</SelectionItem>
+                               <SelectionItem>us-west-1</SelectionItem>
+                               <SelectionItem>us-west-2</SelectionItem>
+                               <SelectionItem>ap-south-1</SelectionItem>
+                               <SelectionItem>ap-northeast-2</SelectionItem>
+                               <SelectionItem>ap-northeast-3</SelectionItem>
+                               <SelectionItem>ap-southeast-1</SelectionItem>
+                               <SelectionItem>ap-southeast-2</SelectionItem>
+                               <SelectionItem>ap-northeast-1</SelectionItem>
+                               <SelectionItem>ca-central-1</SelectionItem>
+                               <SelectionItem>cn-north-1</SelectionItem>
+                               <SelectionItem>eu-central-1</SelectionItem>
+                               <SelectionItem>eu-west-1</SelectionItem>
+                               <SelectionItem>eu-west-2</SelectionItem>
+                               <SelectionItem>eu-west-3</SelectionItem>
+                               <SelectionItem>sa-east-1</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Bucket" defaultValue="" description="Bucket name" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\DeliveryFolder" encrypt="false" mask="false" required="true" type="string"/>
+                 <SettingDefinition name="Use Proxy" description="Use Proxy for pickup exchanges" encrypt="false" mask="false" required="true" type="string" defaultValue="false">
+                        <SelectionList>
+                                <SelectionItem>true</SelectionItem>
+                                <SelectionItem>false</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Proxy Host" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Port" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Username" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Proxy Password" defaultValue="" description="" type="string" required="false" encrypt="true" mask="true"/>
+        </SettingDefinitions>
+         
+        <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="delivery" />
+        </ConstantSettings>
+</TransportDefinition>

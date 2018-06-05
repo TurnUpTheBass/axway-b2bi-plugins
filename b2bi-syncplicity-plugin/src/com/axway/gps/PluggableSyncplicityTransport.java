@@ -78,9 +78,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	String _PGMNAME = com.axway.gps.PluggableSyncplicityTransport.class.getName();
 	String _PGMVERSION = "1.0.0";
 	
-	/** Constants defining valid configuration tags 
-	 *  These tags must NOT contain space or special characters. They MUST match the name element in the pluggabletransports.xml EXACTLY
-	 * **/
 	private static final String SETTING_APPKEY = "App Key";
 	private static final String SETTING_APPSECRET = "App Secret";
 	private static final String SETTING_ADMINTOKEN = "Admin Token";
@@ -135,9 +132,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	private Map<String,String> constantProperties = null;
 	
 
-	/**
-	 * Default constructor - the only constructor used by B2Bi
-	 */
 	public PluggableSyncplicityTransport() {
 		
 		//Set a default logger level
@@ -147,11 +141,7 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 		// logger.debug(String.format("Executing PluggableTransport: %s version: %s",_PGMNAME,_PGMVERSION));
 	}
 
-	/**
-	 * Initialize the pluggable client instance.
-	 *
-	 * @param pluggableSettings the settings provided by GUI configuration or in the pluggabletransports.xml
-	 */
+
 	public void init(PluggableSettings pluggableSettings) throws TransportInitializationException {
 		
 		try {
@@ -217,11 +207,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	}
 
 
-
-	
-	/**
-	 * Create a session
-	 */
 	public void connect() throws UnableToConnectException {
 		
         URL url = null;
@@ -275,10 +260,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 
 	}
 	
-	/**
-	 * The Syncplicity interface is pollable. The isPollable
-	 * method must return 'true' to tell the TE to call the 'list' method
-	 */
 	
 	@Override
 	public boolean isPollable() {
@@ -288,14 +269,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	}
 
 
-	/**
-	 * Send the message 
-	 *
-	 * @param message the message being processed by B2Bi
-	 * @param returnMessage not used in this example
-	 * @return always null
-	 * @throws UnableToProduceException if there was a problem producing the message
-	 */
 	public PluggableMessage produce(PluggableMessage message, PluggableMessage returnMessage) throws UnableToProduceException {
 		
 		
@@ -305,7 +278,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 			
 			uploadFile(message, _folder, _createFolder);
 		 	message.setMetadata("SyncplicityDeliveryFolder", _folder);
-		 	
 
 
 		} catch (Exception e) {
@@ -436,10 +408,8 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	       
 	        int SyncPointId = 0;
 	        
-	        // Temporary workaround until we the virtual_path filtering is working as query parameter (now the function returns all folders)
+	        // Workaround to retrieve the folder ID in one step
 
-	       // logger.debug("Search Path: " + getRelativePath(FolderName));
-	        
 	        for (int i = 0; i < cFolder.length; i++) {
 
         		if (cFolder[i].VirtualPath.equals(getRelativePath(FolderName))) {
@@ -465,13 +435,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	}
 
 	
-	
-	/**
-	 * Return a list of files waiting in our consumption directory.  The trading engine will subsequently call
-	 * consume once for each file in the list.  Since we could be running in a cluster of multiple trading
-	 * engine nodes, we cannot say for sure whether consume will be called on the same machine as list was.
-	 * Thus, the files need to be on a shared directory accessible from all the nodes in the cluster.
-	 */
 	public String[] list() throws UnableToConsumeException {
 		
        // logger.debug("Retrieving the files from folder: " + _folder);
@@ -530,26 +493,12 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 	}
 
 	
-
-	/**
-	 * Delete the specified file in the consumption directory.  The trading engine will call this method after
-	 * it has successfully called our consume method for this file.
-	 *
-	 * @param nameFromList the file reference to delete
-	 */
 	public void delete(String nameFromList) throws UnableToDeleteException, FileNotFoundException {
 		
-		
-		
-		
-		
-		
+		// File has already been deleted at the end of the consumption routine
+
 	}
 
-	/**
-	 * Return an information string if the Pluggable Transport is able to connect to the server.  
-	 * Otherwise throw TransportTestException with an appropriate message.
-	 */
 	public String test() throws TransportTestException {
 		
 		try {
@@ -562,9 +511,6 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 		return "Success, connected to Syncplicity";
 	}
 
-	/**
-	 * Disconnect
-	 */
 	public void disconnect() throws UnableToDisconnectException {
 		// logger.debug("Disconnecting from Syncplicity server");
 		try {
@@ -574,9 +520,11 @@ public class PluggableSyncplicityTransport implements PluggableClient {
 		}
 	}
 
+	
+	
 	// Syncplicity 
 
-   private static String getSyncPointFromPath (String FullPath) {
+	private static String getSyncPointFromPath (String FullPath) {
 
     	// Remove leading "/"
     	
@@ -591,7 +539,7 @@ public class PluggableSyncplicityTransport implements PluggableClient {
     	return basePath;
     	
     
-    }
+	}
     
     private static String getRelativePath (String FullPath) {
 

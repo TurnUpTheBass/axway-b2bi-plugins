@@ -72,9 +72,6 @@ public class PluggableSMBTransport implements PluggableClient {
 	String _PGMNAME = "SMB Adapter";
 	String _PGMVERSION = "1.0.0";
 	
-	/** Constants defining valid configuration tags 
-	 *  These tags must NOT contain space or special characters. They MUST match the name element in the pluggabletransports.xml EXACTLY
-	 * **/
 	private static final String SETTING_SMB_HOST = "SMB Host";
 	private static final String SETTING_SMBFULLPATH = "SMB Share";
 	private static final String SETTING_PICKUP_PATTERN = "Filter";
@@ -120,10 +117,6 @@ public class PluggableSMBTransport implements PluggableClient {
 	private Map<String,String> constantProperties = null;
 	
 
-	/**
-	 * Default constructor - the only constructor used by B2Bi
-	 */
-	
 	public PluggableSMBTransport() {
 		
 		//Set a default logger level

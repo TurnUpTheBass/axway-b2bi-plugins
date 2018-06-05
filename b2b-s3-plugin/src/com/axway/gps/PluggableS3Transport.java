@@ -265,11 +265,6 @@ public class PluggableS3Transport implements PluggableClient {
 
 	}
 	
-	/**
-	 * The S3 interface is pollable. The isPollable
-	 * method must return 'true' to tell the TE to call the 'list' method
-	 */
-	
 	@Override
 	public boolean isPollable() {
 		boolean isPollable = true;
@@ -278,14 +273,6 @@ public class PluggableS3Transport implements PluggableClient {
 	}
 
 
-	/**
-	 * Send the message 
-	 *
-	 * @param message the message being processed by B2Bi
-	 * @param returnMessage not used in this example
-	 * @return always null
-	 * @throws UnableToProduceException if there was a problem producing the message
-	 */
 	public PluggableMessage produce(PluggableMessage message, PluggableMessage returnMessage) throws UnableToProduceException {
 		
 	    String ConsumptionfileName = message.getMetadata(MetadataDictionary.CONSUMPTION_FILENAME);
@@ -361,15 +348,6 @@ public class PluggableS3Transport implements PluggableClient {
 		return _URL;
 	}
 
-	
-	
-	/**
-	 * Return a list of files waiting in our consumption directory.  The trading engine will subsequently call
-	 * consume once for each file in the list.  Since we could be running in a cluster of multiple trading
-	 * engine nodes, we cannot say for sure whether consume will be called on the same machine as list was.
-	 * Thus, the files need to be on a shared directory accessible from all the nodes in the cluster.
-	 */
-	
 	public String[] list() throws UnableToConsumeException {
 		
         logger.debug("Retrieving the files from folder: " + _folder);
@@ -417,14 +395,6 @@ public class PluggableS3Transport implements PluggableClient {
  
 	}
 
-	
-
-	/**
-	 * Delete the specified file in the consumption directory.  The trading engine will call this method after
-	 * it has successfully called our consume method for this file.
-	 *
-	 * @param nameFromList the file reference to delete
-	 */
 	public void delete(String deleteNameFromList) throws UnableToDeleteException, FileNotFoundException {
 		
         logger.debug("Deleting the consumed file (" + deleteNameFromList + ") from folder: " + _folder);
@@ -434,10 +404,7 @@ public class PluggableS3Transport implements PluggableClient {
 		
 	}
 
-	/**
-	 * Return an information string if the Pluggable Transport is able to connect to the server.  
-	 * Otherwise throw TransportTestException with an appropriate message.
-	 */
+
 	public String test() throws TransportTestException {
 		
 		try {
@@ -455,9 +422,6 @@ public class PluggableS3Transport implements PluggableClient {
 		return "Success, connected to S3";
 	}
 
-	/**
-	 * Disconnect
-	 */
 	public void disconnect() throws UnableToDisconnectException {
 		logger.debug("Disconnecting from S3 server");
 		try {
@@ -487,7 +451,11 @@ public class PluggableS3Transport implements PluggableClient {
 		return targetBucket;
 	}
    
- 	
+
+ 	//
+	//  Code from https://docs.aws.amazon.com/AmazonS3/latest/dev/llJavaUploadFile.html
+	//
+	
     public static void MultiPartUpload(PluggableMessage MPUmessage, AmazonS3 MPUamazonS3, String MPUBucket, String MPUKeyName) throws IOException {
     	
         
@@ -498,9 +466,6 @@ public class PluggableS3Transport implements PluggableClient {
 
         try {
                         
-            // Create a list of ETag objects. You retrieve ETags for each object part uploaded,
-            // then, after each individual part has been uploaded, pass the list of ETags to 
-            // the request to complete the upload.
             List<PartETag> partETags = new ArrayList<PartETag>();
 
             // Initiate the multipart upload.

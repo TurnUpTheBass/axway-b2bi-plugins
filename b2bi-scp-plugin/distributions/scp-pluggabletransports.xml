@@ -1,0 +1,61 @@
+﻿	<!-- Custom Pluggable SCP Client -->
+	<TransportDefinition name="SCP Consumer" description="Pluggable transport which consumes messages from an SCP server" available="true">
+		<Class>com.axway.gps.PluggableSCPTransport</Class>
+		<Usages>
+			<Consume>
+               <Integration/>
+               <RawTrading/>
+			</Consume>
+		</Usages>
+		<SettingDefinitions>
+			<SettingDefinition name="Hostname" description="SCP Server host" type="string" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Port" description="SCP Server port" defaultValue="22" type="number" min="1" max="65535" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Folder" description="Pickup directory" defaultValue="/tmp/tmp/tmp" type="string" required="true" encrypt="false" mask="false"/>
+               <SettingDefinition name="Filter Type" defaultValue="glob" description="Pattern type for matching file names" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                                <SelectionItem>glob</SelectionItem>
+                                <SelectionItem>regex</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
+                <SettingDefinition name="Filter" defaultValue="*" description="Filter pattern to download remote files" encrypt="false" mask="false" required="true" type="string"/>
+			<SettingDefinition name="HostKeyVerification" description="Verify the host key presented by the server" type="string" required="true" encrypt="false" mask="false" defaultValue="False">
+				<SelectionList>
+					<SelectionItem>True</SelectionItem>
+        			<SelectionItem>False</SelectionItem>
+				</SelectionList>
+			</SettingDefinition>
+			<SettingDefinition name="HostKey" description="The servers host key - used for host key verification" type="multiString" required="false" encrypt="false" mask="false"/>
+			<SettingDefinition name="Username" description="Username" type="string" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Password" description="Password" type="string" required="true" encrypt="true" mask="true"/>
+		</SettingDefinitions>
+       <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="pickup" />
+        </ConstantSettings>
+	</TransportDefinition>
+
+	<TransportDefinition name="SCP Producer" description="Pluggable transport which produces messages to an SCP server" available="true">
+		<Class>com.axway.gps.PluggableSCPTransport</Class>
+		<Usages>
+			<Produce>
+                <Integration/>
+                <RawTrading/>
+			</Produce>
+		</Usages>
+		<SettingDefinitions>
+			<SettingDefinition name="Hostname" description="SCP Server host" type="string" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Port" description="SCP Server port" defaultValue="22" type="number" min="1" max="65535" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Directory" description="Delivery directory" type="string" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="HostKeyVerification" description="Verify the host key presented by the server" type="string" required="true" encrypt="false" mask="false" defaultValue="False">
+				<SelectionList>
+					<SelectionItem>True</SelectionItem>
+        			<SelectionItem>False</SelectionItem>
+				</SelectionList>
+			</SettingDefinition>
+			<SettingDefinition name="HostKey" description="The servers host key - used for host key verification" type="multiString" required="false" encrypt="false" mask="false"/>
+			<SettingDefinition name="Username" description="Username" type="string" required="true" encrypt="false" mask="false"/>
+			<SettingDefinition name="Password" description="Password" type="string" required="true" encrypt="true" mask="true"/>
+		</SettingDefinitions>
+        <ConstantSettings>
+                <ConstantSetting name="Exchange Type" value="delivery" />
+        </ConstantSettings>
+	</TransportDefinition>

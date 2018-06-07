@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: scp-plugin/lib/jsch-0.1.54.jar
+

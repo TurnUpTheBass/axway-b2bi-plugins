@@ -7,6 +7,7 @@
  *==============================================================================
  * HISTORY
  * 20180506 bvandenberg	1.0.0	initial version.
+ * 20180506 bvandenberg	1.0.1	Updates (disconnect)
  *==============================================================================*/
 package com.axway.gps;
 
@@ -406,15 +407,20 @@ public class PluggableS3Transport implements PluggableClient {
 
 
 	public String test() throws TransportTestException {
+
+		AmazonS3 testamazonS3 = null;
+		BasicAWSCredentials testcredentials = null;
 		
 		try {
 
-			credentials = new BasicAWSCredentials(_accessKey, _secretKey);
+			testcredentials = new BasicAWSCredentials(_accessKey, _secretKey);
 			
-			amazonS3 = AmazonS3ClientBuilder.standard()
+			testamazonS3 = AmazonS3ClientBuilder.standard()
 	                .withRegion(_region)
 	                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
+			testamazonS3.shutdown();
+			
 			
 		} catch(Exception e) {
 			throw new  TransportTestException("Failed to connect to S3");
@@ -425,7 +431,8 @@ public class PluggableS3Transport implements PluggableClient {
 	public void disconnect() throws UnableToDisconnectException {
 		logger.debug("Disconnecting from S3 server");
 		try {
-			
+			// Close the Amazon S3 connection
+			amazonS3.shutdown();
 		
 		} catch(Exception e) {
 			logger.error("Failed to disconnect from S3 server");

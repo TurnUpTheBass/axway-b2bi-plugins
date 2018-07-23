@@ -67,7 +67,7 @@
         </Usages>
         <SettingDefinitions>
                <SettingDefinition name="Access Key" defaultValue="" description="IP/Address or Hostname" type="string" required="true" encrypt="false" mask="false"/>
-                 <SettingDefinition name="Secret Key" defaultValue="" description="AWS Secret Key" type="string" required="true" encrypt="true" mask="true"/>
+               <SettingDefinition name="Secret Key" defaultValue="" description="AWS Secret Key" type="string" required="true" encrypt="true" mask="true"/>
                <SettingDefinition name="AWS Region" defaultValue="us-west-1" description="Select AWS region to reduce latency" type="string" required="true" encrypt="false" mask="false">
                         <SelectionList>
                                <SelectionItem>us-east-2</SelectionItem>

@@ -8,6 +8,7 @@
  * HISTORY
  * 20180506 bvandenberg	1.0.0	initial version.
  * 20180506 bvandenberg	1.0.1	Updates (disconnect)
+ * 20190919 bvandenberg	1.0.2	- Fix for nested folders
  *==============================================================================*/
 package com.axway.gps;
 
@@ -92,12 +93,12 @@ import org.apache.log4j.Level;
 
 
 public class PluggableS3Transport implements PluggableClient {
-	
+
 	//Set program name and version
 	String _PGMNAME = com.axway.gps.PluggableS3Transport.class.getName();
 	String _PGMVERSION = "1.0.0";
-	
-	/** Constants defining valid configuration tags 
+
+	/** Constants defining valid configuration tags
 	 *  These tags must NOT contain space or special characters. They MUST match the name element in the pluggabletransports.xml EXACTLY
 	 * **/
 	private static final String SETTING_ACCESSKEY = "Access Key";
@@ -116,13 +117,13 @@ public class PluggableS3Transport implements PluggableClient {
 	// Setting to distinguish pickup and delivery mode
 	private static final String SETTING_EXCHANGE_TYPE = "Exchange Type";
 
-	
+
 	//this is how you get the log4J logger instance for this class
 	private static Logger logger = Logger.getLogger(com.axway.gps.PluggableS3Transport.class.getName());
 
 	/** a Map containing temporary Message metadata **/
 	private Map metadata = null;
-	
+
 	//Stores the settings from the UI
 	private String _secretKey;
 	private String _accessKey;
@@ -144,19 +145,19 @@ public class PluggableS3Transport implements PluggableClient {
 	private AmazonS3 amazonS3 = null;
 	private BasicAWSCredentials credentials = null;
 	private static final String CONTENT_TYPE = "application/json";
-	
+
 	private static final String SUFFIX = "/";
-	
-	
+
+
 	//Map containing constant settings from pluggabletransport.xml
 	private Map<String,String> constantProperties = null;
-	
+
 
 	/**
 	 * Default constructor - the only constructor used by B2Bi
 	 */
 	public PluggableS3Transport() {
-		
+
 		//Set a default logger level
 		if(logger.getLevel() == null) {
 			logger.setLevel(Level.INFO);
@@ -170,12 +171,12 @@ public class PluggableS3Transport implements PluggableClient {
 	 * @param pluggableSettings the settings provided by GUI configuration or in the pluggabletransports.xml
 	 */
 	public void init(PluggableSettings pluggableSettings) throws TransportInitializationException {
-		
+
 		try {
 
-			// Get all constant settings from the pluggabletransport.xml file and store 
+			// Get all constant settings from the pluggabletransport.xml file and store
 			// them in the local map for later use
-			
+
 			constantProperties = new HashMap<String,String>(pluggableSettings.getConstantSettings());
 			if (constantProperties != null && !constantProperties.isEmpty()) {
 				Iterator<String> i = constantProperties.keySet().iterator();
@@ -183,33 +184,33 @@ public class PluggableS3Transport implements PluggableClient {
 					String key = (String) i.next();
 					// logger.debug("Constant setting " + key + "=" + constantProperties.get(key));
 				}
-			}			
+			}
 			_exchangeType = pluggableSettings.getConstantSetting(SETTING_EXCHANGE_TYPE);
-			
+
 			// Get all settings defined in the GUI for each pluggable transport defined
-			
+
 			_accessKey = pluggableSettings.getSetting(SETTING_ACCESSKEY);
 			_secretKey = pluggableSettings.getSetting(SETTING_SECRETKEY);
 			_region = pluggableSettings.getSetting(SETTING_REGION);
 			_bucket = pluggableSettings.getSetting(SETTING_BUCKETNAME);
 			_folder = pluggableSettings.getSetting(SETTING_FOLDERNAME);
-			
-			
+
+
 			if (_exchangeType.equals("pickup")) {
 				_filtertype = pluggableSettings.getSetting(SETTING_PATTERN_TYPE);
 				_filter = pluggableSettings.getSetting(SETTING_PICKUP_PATTERN);
-				
+
 			}
 			_useProxy = pluggableSettings.getSetting(SETTING_PROXY);
 			_proxyHost = pluggableSettings.getSetting(SETTING_PROXY_HOST);
 			_proxyPort = pluggableSettings.getSetting(SETTING_PROXY_PORT);
 			_proxyUser = pluggableSettings.getSetting(SETTING_PROXY_USER);
 			_proxyPassword = pluggableSettings.getSetting(SETTING_PROXY_PW);
-			
+
 			logger.debug(String.format("Initialization S3 connector Complete"));
-			
-			
-			
+
+
+
 		} catch (Exception e ) {
 			throw new TransportInitializationException("Error getting settings", e);
 		}
@@ -217,55 +218,55 @@ public class PluggableS3Transport implements PluggableClient {
 
 
 
-	
+
 	/**
 	 * Create a session
 	 */
 	public void connect() throws UnableToConnectException {
-		
+
    		if (_useProxy.equals("true")) {
-			
+
 			System.setProperty("http.proxyHost", _proxyHost);
 			System.setProperty("http.proxyPort", _proxyPort);
 			System.setProperty("https.proxyHost", _proxyHost);
 			System.setProperty("https.proxyPort", _proxyPort);
-			
+
 		    Authenticator.setDefault(new NtlmAuthenticator(_proxyUser, _proxyPassword));
 		}
-        
+
 
 		try {
-			  
+
 			credentials = new BasicAWSCredentials(_accessKey, _secretKey);
-			
+
 			amazonS3 = AmazonS3ClientBuilder.standard()
 	                .withRegion(_region)
 	                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 			logger.info("New Amazon S3 Client Connected");
-			
-	      		
-		      
-			
+
+
+
+
 		} catch (Exception e) {
     	    System.err.println("Failed to connect to S3 Server");
 		}
 	}
 
-	
-	public void authenticate() throws UnableToAuthenticateException {
-		
-		try { 
 
-		
-			
+	public void authenticate() throws UnableToAuthenticateException {
+
+		try {
+
+
+
 		} catch (Exception e) {
 			throw new UnableToAuthenticateException("Unable to authenticate to S3 server");
 		}
-		
+
 
 	}
-	
+
 	@Override
 	public boolean isPollable() {
 		boolean isPollable = true;
@@ -275,73 +276,73 @@ public class PluggableS3Transport implements PluggableClient {
 
 
 	public PluggableMessage produce(PluggableMessage message, PluggableMessage returnMessage) throws UnableToProduceException {
-		
+
 	    String ConsumptionfileName = message.getMetadata(MetadataDictionary.CONSUMPTION_FILENAME);
 		String ProductionFileName = _folder + SUFFIX + ConsumptionfileName;
-		
-		try { 
-			
+
+		try {
+
 			logger.debug(String.format("Producing message"));
-			
-			
+
+
 			if(message.getData().length() > (10 * 1024 * 1024)) {
 				logger.info("Large message - upload in 5 MB chunks");
-				MultiPartUpload(message,amazonS3, _bucket, ProductionFileName);			
+				MultiPartUpload(message,amazonS3, _bucket, ProductionFileName);
 			} else {
 				logger.info("Small message - non-chunked upload");
-				
+
 			    File file = message.getData().toFile();
 				amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 						.withCannedAcl(CannedAccessControlList.PublicRead));
-				
+
 		    }
-			
+
 			String msg = "S3 File Delivery complete.";
 			returnMessage.setData(new VirtualData(msg.toCharArray()));
 
 		} catch (Exception e) {
 		     throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
-		}     
-		
+		}
+
 		return null;
 	}
 
-	
+
 	public PluggableMessage consume(PluggableMessage message, String consumeNameFromList) throws UnableToConsumeException, FileNotFoundException {
 
-		
+
 		String ConsumptionFileName = _folder + SUFFIX + consumeNameFromList;
 
 		try {
 
 
 			logger.info("Consuming message: " + ConsumptionFileName);
-			
+
 			GetObjectRequest getObjectRequest = new GetObjectRequest(_bucket, ConsumptionFileName);
-			S3Object object = amazonS3.getObject(getObjectRequest);		
+			S3Object object = amazonS3.getObject(getObjectRequest);
 			S3ObjectInputStream inputStream = object.getObjectContent();
 		    VirtualData data = new VirtualData();
-		    data.readFrom(inputStream);		
+		    data.readFrom(inputStream);
 		    message.setData(data);
 		 	message.setFilename(consumeNameFromList);
 		 	message.setMetadata("AWS S3 Bucket", _bucket);
 		 	message.setMetadata("AWS S3 Folder", _folder);
-		    
-			
-			
+
+
+
 		} catch (Exception e) {
 		      throw new UnableToConsumeException ("Failed to consume " + consumeNameFromList + " from AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
-		}     
-		
+		}
+
 		logger.info("Succesfully consumed message: " + ConsumptionFileName);
-		
-	return message;	  
-	
+
+	return message;
+
 
 	}
-	
 
-	
+
+
 	@Override
 	public String getUrl() throws PluggableException {
 		String _URL;
@@ -350,59 +351,63 @@ public class PluggableS3Transport implements PluggableClient {
 	}
 
 	public String[] list() throws UnableToConsumeException {
-		
+
         logger.debug("Retrieving the files from folder: " + _folder);
-        
+
     	String[] list = null;
         ArrayList<String> result = new ArrayList<String>();
-	
+
 	    ObjectListing listing = amazonS3.listObjects(new ListObjectsRequest().withBucketName(_bucket).withPrefix(_folder));
 	    for (S3ObjectSummary objectSummary : listing.getObjectSummaries()) {
-	    	
-	    	
-	    	String splitFolderPath[] = objectSummary.getKey().split("/");
-	    	
-	    	if (splitFolderPath.length > 1) {
-	    		
-	    		String entryName = splitFolderPath[1];
-	    		
-	    		logger.debug("Folder Entry: " + entryName);
-	    	  
-				PatternKeyValidator validator = PatternKeyValidatorFactory.createPatternValidator(_filtertype);
-				
-				if (validator.isValid(entryName, _filter)) {
-					result.add(entryName);
-					logger.debug(entryName + " added to list."); 
-				}
-				else {
-					logger.debug(entryName + " does not match the defined filter (" + _filter +") and /or filter type (" + _filtertype + ")"); 
-				}
 
-	    	} else {
-	    		
+	    	if (objectSummary.getKey().endsWith("/")) {
+
 	    		logger.debug("Folder Name: " + objectSummary.getKey());
-	    		
 	    	}
-	      
+	    	else {
+
+		    	String splitFolderPath[] = objectSummary.getKey().split("/");
+
+		    	if (splitFolderPath.length > 1) {
+
+		    		String entryName = splitFolderPath[splitFolderPath.length-1];
+
+					PatternKeyValidator validator = PatternKeyValidatorFactory.createPatternValidator(_filtertype);
+
+
+					if (validator.isValid(entryName, _filter)) {
+						result.add(entryName);
+						logger.info(entryName + " added to list.");
+					}
+					else {
+						logger.debug(entryName + " does not match the defined filter (" + _filter +") and /or filter type (" + _filtertype + ")");
+					}
+
+		    	} else {
+
+		    		//logger.debug("Folder Name: " + objectSummary.getKey());
+
+		    	}
+	    	}
 	    }
- 	        
+
 		list = new String[result.size()];
 		for (int i = 0; i < result.size(); i++) {
 			list[i] = result.get(i);
 			logger.debug("Adding Item [" + i + "]: " + list[i]);
 		}
-        
+
         return list;
- 
+
 	}
 
 	public void delete(String deleteNameFromList) throws UnableToDeleteException, FileNotFoundException {
-		
+
         logger.debug("Deleting the consumed file (" + deleteNameFromList + ") from folder: " + _folder);
 		String deletionFileName = _folder + SUFFIX + deleteNameFromList;
 		DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(_bucket, deletionFileName);
 		amazonS3.deleteObject(deleteObjectRequest);
-		
+
 	}
 
 
@@ -410,18 +415,18 @@ public class PluggableS3Transport implements PluggableClient {
 
 		AmazonS3 testamazonS3 = null;
 		BasicAWSCredentials testcredentials = null;
-		
+
 		try {
 
 			testcredentials = new BasicAWSCredentials(_accessKey, _secretKey);
-			
+
 			testamazonS3 = AmazonS3ClientBuilder.standard()
 	                .withRegion(_region)
 	                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 			testamazonS3.shutdown();
-			
-			
+
+
 		} catch(Exception e) {
 			throw new  TransportTestException("Failed to connect to S3");
 		}
@@ -433,16 +438,16 @@ public class PluggableS3Transport implements PluggableClient {
 		try {
 			// Close the Amazon S3 connection
 			amazonS3.shutdown();
-		
+
 		} catch(Exception e) {
 			logger.error("Failed to disconnect from S3 server");
 		}
 	}
 
-	// S3 
+	// S3
 
 	public static Bucket getBucketID (AmazonS3 BucketamazonS3, String BucketName) {
-		
+
 		Bucket targetBucket = null;
 
 		List<Bucket> buckets = BucketamazonS3.listBuckets();
@@ -453,26 +458,26 @@ public class PluggableS3Transport implements PluggableClient {
 		    targetBucket = bucket;
 		    break;
 		  }
-		}		
-		
+		}
+
 		return targetBucket;
 	}
-   
+
 
  	//
 	//  Code from https://docs.aws.amazon.com/AmazonS3/latest/dev/llJavaUploadFile.html
 	//
-	
+
     public static void MultiPartUpload(PluggableMessage MPUmessage, AmazonS3 MPUamazonS3, String MPUBucket, String MPUKeyName) throws IOException {
-    	
-        
+
+
 	    File file = MPUmessage.getData().toFile();
-	    
+
         long contentLength = file.length();
-        long partSize = 5 * 1024 * 1024; // Set part size to 5 MB. 
+        long partSize = 5 * 1024 * 1024; // Set part size to 5 MB.
 
         try {
-                        
+
             List<PartETag> partETags = new ArrayList<PartETag>();
 
             // Initiate the multipart upload.
@@ -508,7 +513,7 @@ public class PluggableS3Transport implements PluggableClient {
             MPUamazonS3.completeMultipartUpload(compRequest);
         }
         catch(AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process 
+            // The call was transmitted successfully, but Amazon S3 couldn't process
             // it, so it returned an error response.
             e.printStackTrace();
         }
@@ -517,15 +522,15 @@ public class PluggableS3Transport implements PluggableClient {
             // couldn't parse the response from Amazon S3.
             e.printStackTrace();
         }
-        
+
         file.delete();
-     
-        
+
+
     }
 
-    
-   	
-	
 
-	  	
+
+
+
+
 }

@@ -44,6 +44,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
@@ -106,6 +107,7 @@ public class PluggableS3Transport implements PluggableClient {
 	private static final String SETTING_REGION = "AWS Region";
 	private static final String SETTING_BUCKETNAME = "Bucket";
 	private static final String SETTING_FOLDERNAME = "Folder";
+	private static final String SETTING_ACL = "ACL";
 	private static final String SETTING_PICKUP_PATTERN = "Filter";
 	private static final String SETTING_PATTERN_TYPE = "Filter Type";
 	private static final String SETTING_PROXY = "Use Proxy";
@@ -130,6 +132,7 @@ public class PluggableS3Transport implements PluggableClient {
 	private String _region;
 	private String _bucket;
 	private String _folder;
+	private String _acl;
 	private String _filter;
 	private String _filtertype;
 	private String _exchangeType;
@@ -194,6 +197,7 @@ public class PluggableS3Transport implements PluggableClient {
 			_region = pluggableSettings.getSetting(SETTING_REGION);
 			_bucket = pluggableSettings.getSetting(SETTING_BUCKETNAME);
 			_folder = pluggableSettings.getSetting(SETTING_FOLDERNAME);
+			_acl = pluggableSettings.getSetting(SETTING_ACL);
 
 
 			if (_exchangeType.equals("pickup")) {
@@ -292,9 +296,40 @@ public class PluggableS3Transport implements PluggableClient {
 				logger.info("Small message - non-chunked upload");
 
 			    File file = message.getData().toFile();
-				amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
-						.withCannedAcl(CannedAccessControlList.PublicRead));
-
+			    switch (_acl) {
+			    	case "private":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.Private));
+			    		break;
+			    	case "public-read":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.PublicRead));
+			    		break;
+			    	case "public-read-write":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.PublicReadWrite));
+			    		break;
+			    	case "aws-exec-read":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.AwsExecRead));
+			    		break;
+			    	case "authenticated-read":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.AuthenticatedRead));
+			    		break;
+			    	case "bucket-owner-read":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.BucketOwnerRead));
+			    		break;
+			    	case "bucket-owner-full-control":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
+			    		break;
+			    	case "log-delivery-write":
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+								.withCannedAcl(CannedAccessControlList.LogDeliveryWrite));
+			    		break;		    	
+			    }
 		    }
 
 			String msg = "S3 File Delivery complete.";

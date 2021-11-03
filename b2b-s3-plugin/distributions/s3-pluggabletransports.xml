@@ -31,7 +31,7 @@
                         </SelectionList>
                 </SettingDefinition>
                 <SettingDefinition name="Bucket" defaultValue="" description="Bucket name" encrypt="false" mask="false" required="true" type="string"/>
-                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\PickupFolder" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\PickupFolder" encrypt="false" mask="false" required="false" type="string"/>
                 <SettingDefinition name="Filter Type" defaultValue="glob" description="Pattern type for matching file names" type="string" required="true" encrypt="false" mask="false">
                         <SelectionList>
                                 <SelectionItem>glob</SelectionItem>
@@ -90,7 +90,19 @@
                         </SelectionList>
                 </SettingDefinition>
                 <SettingDefinition name="Bucket" defaultValue="" description="Bucket name" encrypt="false" mask="false" required="true" type="string"/>
-                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\DeliveryFolder" encrypt="false" mask="false" required="true" type="string"/>
+                <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\DeliveryFolder" encrypt="false" mask="false" required="false" type="string"/>
+				<SettingDefinition name="ACL" defaultValue="private" description="Select ACL permission for the transferred file" type="string" required="true" encrypt="false" mask="false">
+                        <SelectionList>
+                               <SelectionItem>private</SelectionItem>
+                               <SelectionItem>public-read</SelectionItem>
+                               <SelectionItem>public-read-write</SelectionItem>
+                               <SelectionItem>aws-exec-read</SelectionItem>
+                               <SelectionItem>authenticated-read</SelectionItem>
+                               <SelectionItem>bucket-owner-read</SelectionItem>
+                               <SelectionItem>bucket-owner-full-control</SelectionItem>
+                               <SelectionItem>log-delivery-write</SelectionItem>
+                        </SelectionList>
+                </SettingDefinition>
                  <SettingDefinition name="Use Proxy" description="Use Proxy for pickup exchanges" encrypt="false" mask="false" required="true" type="string" defaultValue="false">
                         <SelectionList>
                                 <SelectionItem>true</SelectionItem>

@@ -49,7 +49,7 @@
                 <SettingDefinition name="Proxy Port" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
                 <SettingDefinition name="Proxy Username" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
                 <SettingDefinition name="Proxy Password" defaultValue="" description="" type="string" required="false" encrypt="true" mask="true"/>
-				
+                
         </SettingDefinitions>
         <ConstantSettings>
                 <ConstantSetting name="Exchange Type" value="pickup" />
@@ -91,8 +91,9 @@
                 </SettingDefinition>
                 <SettingDefinition name="Bucket" defaultValue="" description="Bucket name" encrypt="false" mask="false" required="true" type="string"/>
                 <SettingDefinition name="Folder" defaultValue="" description="Folder name. Illustrative example: Folder\DeliveryFolder" encrypt="false" mask="false" required="false" type="string"/>
-				<SettingDefinition name="ACL" defaultValue="private" description="Select ACL permission for the transferred file" type="string" required="true" encrypt="false" mask="false">
+                <SettingDefinition name="ACL" defaultValue="" description="Select ACL permission for the transferred file" type="string" required="false" encrypt="false" mask="false">
                         <SelectionList>
+                               <SelectionItem></SelectionItem>
                                <SelectionItem>private</SelectionItem>
                                <SelectionItem>public-read</SelectionItem>
                                <SelectionItem>public-read-write</SelectionItem>

@@ -45,6 +45,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
@@ -57,6 +58,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -197,14 +199,17 @@ public class PluggableS3Transport implements PluggableClient {
 			_region = pluggableSettings.getSetting(SETTING_REGION);
 			_bucket = pluggableSettings.getSetting(SETTING_BUCKETNAME);
 			_folder = pluggableSettings.getSetting(SETTING_FOLDERNAME);
-			_acl = pluggableSettings.getSetting(SETTING_ACL);
-
-
+			
 			if (_exchangeType.equals("pickup")) {
 				_filtertype = pluggableSettings.getSetting(SETTING_PATTERN_TYPE);
 				_filter = pluggableSettings.getSetting(SETTING_PICKUP_PATTERN);
 
 			}
+			
+			if (_exchangeType.equals("delivery")) {
+				_acl = pluggableSettings.getSetting(SETTING_ACL);
+			}
+			
 			_useProxy = pluggableSettings.getSetting(SETTING_PROXY);
 			_proxyHost = pluggableSettings.getSetting(SETTING_PROXY_HOST);
 			_proxyPort = pluggableSettings.getSetting(SETTING_PROXY_PORT);
@@ -296,9 +301,12 @@ public class PluggableS3Transport implements PluggableClient {
 				logger.info("Small message - non-chunked upload");
 
 			    File file = message.getData().toFile();
+
+				logger.info("Uploading file with ACL: " + _acl );
+			    
 			    switch (_acl) {
 			    	case "private":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+			    		 amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.Private));
 			    		break;
 			    	case "public-read":
@@ -328,14 +336,19 @@ public class PluggableS3Transport implements PluggableClient {
 			    	case "log-delivery-write":
 			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.LogDeliveryWrite));
-			    		break;		    	
+			    		break;
+			    	default:
+			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file));
 			    }
 		    }
 
 			String msg = "S3 File Delivery complete.";
 			returnMessage.setData(new VirtualData(msg.toCharArray()));
 
-		} catch (Exception e) {
+		} catch (AmazonS3Exception e) {
+			throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder + 
+	    			" with ACL: " + _acl + ". Please check that the correct ALC is selected for writing to this bucket.");
+		} catch (IOException e) {
 		     throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
 		}
 

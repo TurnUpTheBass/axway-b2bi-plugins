@@ -9,6 +9,7 @@
  * 20180506 bvandenberg	1.0.0	initial version.
  * 20180506 bvandenberg	1.0.1	Updates (disconnect)
  * 20190919 bvandenberg	1.0.2	- Fix for nested folders
+ * 20220107	deviani		1.0.3	add ACL selection
  *==============================================================================*/
 package com.axway.gps;
 

@@ -293,7 +293,7 @@ public class PluggableS3Transport implements PluggableClient {
 
 			    File file = message.getData().toFile();
 				amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
-						.withCannedAcl(CannedAccessControlList.PublicRead));
+						.withCannedAcl(CannedAccessControlList.Private));
 
 		    }
 

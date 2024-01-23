@@ -49,6 +49,8 @@
                 <SettingDefinition name="Proxy Port" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
                 <SettingDefinition name="Proxy Username" defaultValue="" description="" type="string" required="false" encrypt="false" mask="false"/>
                 <SettingDefinition name="Proxy Password" defaultValue="" description="" type="string" required="false" encrypt="true" mask="true"/>
+                <SettingDefinition name="Delete After Download" defaultValue="true" description="" type="boolean" required="false" encrypt="false" mask="false"/>
+                <SettingDefinition name="Download Latest Files First" defaultValue="true" description="" type="boolean" required="false" encrypt="false" mask="false"/>
                 
         </SettingDefinitions>
         <ConstantSettings>

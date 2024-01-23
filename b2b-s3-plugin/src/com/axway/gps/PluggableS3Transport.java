@@ -17,7 +17,6 @@ import com.cyclonecommerce.tradingengine.transport.UnableToConnectException;
 import com.cyclonecommerce.tradingengine.transport.UnableToAuthenticateException;
 import com.cyclonecommerce.tradingengine.transport.UnableToConsumeException;
 import com.cyclonecommerce.tradingengine.transport.UnableToProduceException;
-import com.cyclonecommerce.api.inlineprocessing.Message;
 import com.cyclonecommerce.collaboration.MetadataDictionary;
 import com.cyclonecommerce.tradingengine.transport.FileNotFoundException;
 import com.cyclonecommerce.tradingengine.transport.UnableToDeleteException;
@@ -37,15 +36,10 @@ import util.pattern.PatternKeyValidatorFactory;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -56,38 +50,21 @@ import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.s3.model.UploadPartRequest;
 import com.amazonaws.services.s3.model.UploadPartResult;
-import com.axway.dmznode.DmzAgentFactory;
-import com.axway.dmznode.DmzException;
-
-
 import java.net.Authenticator;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-
 import org.apache.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -118,6 +95,8 @@ public class PluggableS3Transport implements PluggableClient {
 	private static final String SETTING_PROXY_PORT = "Proxy Port";
 	private static final String SETTING_PROXY_USER = "Proxy Username";
 	private static final String SETTING_PROXY_PW = "Proxy Password";
+	private static final String DELETE_AFTER_DOWNLOAD = "Delete After Download";
+	private static final String DOWNLOAD_LATEST_FILES_FIRST = "Download Latest Files First";
 
 	// Setting to distinguish pickup and delivery mode
 	private static final String SETTING_EXCHANGE_TYPE = "Exchange Type";
@@ -126,7 +105,7 @@ public class PluggableS3Transport implements PluggableClient {
 	//this is how you get the log4J logger instance for this class
 	private static Logger logger = Logger.getLogger(com.axway.gps.PluggableS3Transport.class.getName());
 
-	/** a Map containing temporary Message metadata **/
+	//Map containing temporary Message metadata
 	private Map metadata = null;
 
 	//Stores the settings from the UI
@@ -144,13 +123,15 @@ public class PluggableS3Transport implements PluggableClient {
 	private String _proxyPort;
 	private String _proxyUser;
 	private String _proxyPassword;
+	private boolean _deleteAfterDownload;
+	private boolean _downloadLatestFirst;
 
     String messageContent = null;
 	Properties env = null;
 
 	private AmazonS3 amazonS3 = null;
 	private BasicAWSCredentials credentials = null;
-	private static final String CONTENT_TYPE = "application/json";
+	// private static final String CONTENT_TYPE = "application/json";
 
 	private static final String SUFFIX = "/";
 
@@ -184,13 +165,7 @@ public class PluggableS3Transport implements PluggableClient {
 			// them in the local map for later use
 
 			constantProperties = new HashMap<String,String>(pluggableSettings.getConstantSettings());
-			if (constantProperties != null && !constantProperties.isEmpty()) {
-				Iterator<String> i = constantProperties.keySet().iterator();
-				while (i.hasNext()) {
-					String key = (String) i.next();
-					// logger.debug("Constant setting " + key + "=" + constantProperties.get(key));
-				}
-			}
+
 			_exchangeType = pluggableSettings.getConstantSetting(SETTING_EXCHANGE_TYPE);
 
 			// Get all settings defined in the GUI for each pluggable transport defined
@@ -216,6 +191,8 @@ public class PluggableS3Transport implements PluggableClient {
 			_proxyPort = pluggableSettings.getSetting(SETTING_PROXY_PORT);
 			_proxyUser = pluggableSettings.getSetting(SETTING_PROXY_USER);
 			_proxyPassword = pluggableSettings.getSetting(SETTING_PROXY_PW);
+			_deleteAfterDownload = Boolean.valueOf(pluggableSettings.getSetting(DELETE_AFTER_DOWNLOAD));
+			_downloadLatestFirst = Boolean.valueOf(pluggableSettings.getSetting(DOWNLOAD_LATEST_FILES_FIRST));
 
 			logger.debug(String.format("Initialization S3 connector Complete"));
 
@@ -288,7 +265,11 @@ public class PluggableS3Transport implements PluggableClient {
 	public PluggableMessage produce(PluggableMessage message, PluggableMessage returnMessage) throws UnableToProduceException {
 
 	    String ConsumptionfileName = message.getMetadata(MetadataDictionary.CONSUMPTION_FILENAME);
-		String ProductionFileName = _folder + SUFFIX + ConsumptionfileName;
+		String ProductionFileName = "";
+		if (_folder == null || _folder.trim().isEmpty())
+			ProductionFileName = ConsumptionfileName;
+		else
+			ProductionFileName = _folder + SUFFIX + ConsumptionfileName;
 
 		try {
 
@@ -360,7 +341,11 @@ public class PluggableS3Transport implements PluggableClient {
 	public PluggableMessage consume(PluggableMessage message, String consumeNameFromList) throws UnableToConsumeException, FileNotFoundException {
 
 
-		String ConsumptionFileName = _folder + SUFFIX + consumeNameFromList;
+		String ConsumptionFileName = "";
+		if (_folder == null || _folder.trim().isEmpty())
+			ConsumptionFileName = consumeNameFromList;
+		else
+			ConsumptionFileName = _folder + SUFFIX + consumeNameFromList;
 
 		try {
 
@@ -406,20 +391,46 @@ public class PluggableS3Transport implements PluggableClient {
     	String[] list = null;
         ArrayList<String> result = new ArrayList<String>();
 
-	    ObjectListing listing = amazonS3.listObjects(new ListObjectsRequest().withBucketName(_bucket).withPrefix(_folder));
-	    for (S3ObjectSummary objectSummary : listing.getObjectSummaries()) {
 
-	    	if (objectSummary.getKey().endsWith("/")) {
+		//get all objects of the bucket using pagination
+		ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+				.withBucketName(_bucket)
+				.withPrefix(_folder);
+		
+		ArrayList<S3ObjectSummary> S3ObjectSummaries = new ArrayList<S3ObjectSummary>();
+		ObjectListing listing;
+		do {
+			listing = amazonS3.listObjects(listObjectsRequest);		
+			
+			S3ObjectSummaries.addAll(listing.getObjectSummaries());
 
-	    		logger.debug("Folder Name: " + objectSummary.getKey());
-	    	}
-	    	else {
+			if (listing.isTruncated()) {
+				listObjectsRequest.setMarker(listing.getNextMarker());
+			  }
+		} while (listing.isTruncated());
 
-		    	String splitFolderPath[] = objectSummary.getKey().split("/");
 
-		    	if (splitFolderPath.length > 1) {
+		//sort based on modified time
+		if(_downloadLatestFirst)
+			S3ObjectSummaries.sort(Comparator.comparing(S3ObjectSummary::getLastModified).reversed());
+		else
+			S3ObjectSummaries.sort(Comparator.comparing(S3ObjectSummary::getLastModified));
 
-		    		String entryName = splitFolderPath[splitFolderPath.length-1];
+			
+		//filter the list of objects and return the list of files
+		for (S3ObjectSummary objectSummary : S3ObjectSummaries) {
+
+			if (objectSummary.getKey().endsWith("/")) {
+
+				logger.debug("Folder Name: " + objectSummary.getKey());
+			}
+			else {
+
+				String splitFolderPath[] = objectSummary.getKey().split("/");
+
+				if (splitFolderPath.length > 1) {
+
+					String entryName = splitFolderPath[splitFolderPath.length-1];
 
 					PatternKeyValidator validator = PatternKeyValidatorFactory.createPatternValidator(_filtertype);
 
@@ -432,13 +443,13 @@ public class PluggableS3Transport implements PluggableClient {
 						logger.debug(entryName + " does not match the defined filter (" + _filter +") and /or filter type (" + _filtertype + ")");
 					}
 
-		    	} else {
+				} else {
 
-		    		//logger.debug("Folder Name: " + objectSummary.getKey());
+					//logger.debug("Folder Name: " + objectSummary.getKey());
 
-		    	}
-	    	}
-	    }
+				}
+			}
+		}
 
 		list = new String[result.size()];
 		for (int i = 0; i < result.size(); i++) {
@@ -452,8 +463,16 @@ public class PluggableS3Transport implements PluggableClient {
 
 	public void delete(String deleteNameFromList) throws UnableToDeleteException, FileNotFoundException {
 
+		if(!_deleteAfterDownload)
+			return;
+
         logger.debug("Deleting the consumed file (" + deleteNameFromList + ") from folder: " + _folder);
-		String deletionFileName = _folder + SUFFIX + deleteNameFromList;
+		String deletionFileName ="";
+		if (_folder == null || _folder.trim().isEmpty())
+			deletionFileName = deleteNameFromList;
+		else
+			deletionFileName = _folder + SUFFIX + deleteNameFromList;
+		
 		DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(_bucket, deletionFileName);
 		amazonS3.deleteObject(deleteObjectRequest);
 
@@ -471,7 +490,7 @@ public class PluggableS3Transport implements PluggableClient {
 
 			testamazonS3 = AmazonS3ClientBuilder.standard()
 	                .withRegion(_region)
-	                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+	                .withCredentials(new AWSStaticCredentialsProvider(testcredentials)).build();
 
 			testamazonS3.shutdown();
 

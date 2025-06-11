@@ -130,7 +130,7 @@ public class PluggableS3Transport implements PluggableClient {
 	private boolean _downloadLatestFirst;
 	private long _maxFiles;
 
-    String messageContent = null;
+	String messageContent = null;
 	Properties env = null;
 
 	private AmazonS3 amazonS3 = null;
@@ -187,22 +187,25 @@ public class PluggableS3Transport implements PluggableClient {
 			if(_folder.startsWith(SUFFIX)) {
 				_folder = _folder.substring(1);
 			}
-			
+
 			if (_exchangeType.equals("pickup")) {
 				_filtertype = pluggableSettings.getSetting(SETTING_PATTERN_TYPE);
 				_filter = pluggableSettings.getSetting(SETTING_PICKUP_PATTERN);
 
 			}
-			
+
 			if (_exchangeType.equals("delivery")) {
 				_acl = pluggableSettings.getSetting(SETTING_ACL);
 			}
-			
+
 			_useProxy = pluggableSettings.getSetting(SETTING_PROXY);
-			_proxyHost = pluggableSettings.getSetting(SETTING_PROXY_HOST);
-			_proxyPort = pluggableSettings.getSetting(SETTING_PROXY_PORT);
-			_proxyUser = pluggableSettings.getSetting(SETTING_PROXY_USER);
-			_proxyPassword = pluggableSettings.getSetting(SETTING_PROXY_PW);
+			if (_useProxy.equals("true")) {
+				_proxyHost = pluggableSettings.getSetting(SETTING_PROXY_HOST);
+				_proxyPort = pluggableSettings.getSetting(SETTING_PROXY_PORT);
+				_proxyUser = pluggableSettings.getSetting(SETTING_PROXY_USER);
+				_proxyPassword = pluggableSettings.getSetting(SETTING_PROXY_PW);
+			}
+
 			if (_exchangeType.equals("pickup")) {
 				_includeSubfolders = Boolean.valueOf(pluggableSettings.getSetting(SETTING_INCLUDE_SUBFOLDERS));
 				_deleteAfterDownload = Boolean.valueOf(pluggableSettings.getSetting(SETTING_DELETE_AFTER_DOWNLOAD));
@@ -224,14 +227,14 @@ public class PluggableS3Transport implements PluggableClient {
 	 */
 	public void connect() throws UnableToConnectException {
 
-   		if (_useProxy.equals("true")) {
+		if (_useProxy.equals("true")) {
 
 			System.setProperty("http.proxyHost", _proxyHost);
 			System.setProperty("http.proxyPort", _proxyPort);
 			System.setProperty("https.proxyHost", _proxyHost);
 			System.setProperty("https.proxyPort", _proxyPort);
 
-		    Authenticator.setDefault(new NtlmAuthenticator(_proxyUser, _proxyPassword));
+			Authenticator.setDefault(new NtlmAuthenticator(_proxyUser, _proxyPassword));
 		}
 
 
@@ -240,8 +243,8 @@ public class PluggableS3Transport implements PluggableClient {
 			credentials = new BasicAWSCredentials(_accessKey, _secretKey);
 
 			amazonS3 = AmazonS3ClientBuilder.standard()
-	                .withRegion(_region)
-	                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+					.withRegion(_region)
+					.withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 			logger.info("New Amazon S3 Client Connected");
 
@@ -249,7 +252,7 @@ public class PluggableS3Transport implements PluggableClient {
 
 
 		} catch (Exception e) {
-    	    System.err.println("Failed to connect to S3 Server");
+			System.err.println("Failed to connect to S3 Server");
 		}
 	}
 
@@ -276,7 +279,7 @@ public class PluggableS3Transport implements PluggableClient {
 
 	public PluggableMessage produce(PluggableMessage message, PluggableMessage returnMessage) throws UnableToProduceException {
 
-	    String ConsumptionfileName = message.getMetadata(MetadataDictionary.CONSUMPTION_FILENAME);
+		String ConsumptionfileName = message.getMetadata(MetadataDictionary.CONSUMPTION_FILENAME);
 		String ProductionFileName = "";
 		if (_folder == null || _folder.trim().isEmpty())
 			ProductionFileName = ConsumptionfileName;
@@ -290,60 +293,65 @@ public class PluggableS3Transport implements PluggableClient {
 
 			if(message.getData().length() > (10 * 1024 * 1024)) {
 				logger.info("Large message - upload in 5 MB chunks");
-				MultiPartUpload(message,amazonS3, _bucket, ProductionFileName);
+				try {
+					MultiPartUpload(message,amazonS3, _bucket, ProductionFileName);
+				}
+				catch (Exception e){
+					throw new UnableToProduceException("Failed to deliver multipart upload file: " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder + " ERROR: "+ e.getMessage());
+				}
 			} else {
 				logger.info("Small message - non-chunked upload");
 
-			    File file = message.getData().toFile();
+				File file = message.getData().toFile();
 
 				logger.info("Uploading file with ACL: " + _acl );
-			    
-			    switch (_acl) {
-			    	case "private":
-			    		 amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+
+				switch (_acl) {
+					case "private":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.Private));
-			    		break;
-			    	case "public-read":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "public-read":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.PublicRead));
-			    		break;
-			    	case "public-read-write":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "public-read-write":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.PublicReadWrite));
-			    		break;
-			    	case "aws-exec-read":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "aws-exec-read":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.AwsExecRead));
-			    		break;
-			    	case "authenticated-read":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "authenticated-read":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.AuthenticatedRead));
-			    		break;
-			    	case "bucket-owner-read":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "bucket-owner-read":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.BucketOwnerRead));
-			    		break;
-			    	case "bucket-owner-full-control":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "bucket-owner-full-control":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
-			    		break;
-			    	case "log-delivery-write":
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
+						break;
+					case "log-delivery-write":
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file)
 								.withCannedAcl(CannedAccessControlList.LogDeliveryWrite));
-			    		break;
-			    	default:
-			    		amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file));
-			    }
-		    }
+						break;
+					default:
+						amazonS3.putObject(new PutObjectRequest(_bucket, ProductionFileName, file));
+				}
+			}
 
 			String msg = "S3 File Delivery complete.";
 			returnMessage.setData(new VirtualData(msg.toCharArray()));
 
 		} catch (AmazonS3Exception e) {
-			throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder + 
-	    			" with ACL: " + _acl + ". Please check that the correct ALC is selected for writing to this bucket.");
+			throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder +
+					" with ACL: " + _acl + ". Please check that the correct ALC is selected for writing to this bucket.");
 		} catch (IOException e) {
-		     throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
+			throw new UnableToProduceException("Failed to deliver " + ConsumptionfileName +  " to AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
 		}
 
 		return null;
@@ -367,22 +375,22 @@ public class PluggableS3Transport implements PluggableClient {
 			GetObjectRequest getObjectRequest = new GetObjectRequest(_bucket, ConsumptionFileName);
 			S3Object object = amazonS3.getObject(getObjectRequest);
 			S3ObjectInputStream inputStream = object.getObjectContent();
-		    VirtualData data = new VirtualData();
-		    data.readFrom(inputStream);
-		    message.setData(data);
-		 	message.setFilename(consumeNameFromList);
-		 	message.setMetadata("AWS S3 Bucket", _bucket);
-		 	message.setMetadata("AWS S3 Folder", _folder);
+			VirtualData data = new VirtualData();
+			data.readFrom(inputStream);
+			message.setData(data);
+			message.setFilename(consumeNameFromList);
+			message.setMetadata("AWS S3 Bucket", _bucket);
+			message.setMetadata("AWS S3 Folder", _folder);
 
 
 
 		} catch (Exception e) {
-		      throw new UnableToConsumeException ("Failed to consume " + consumeNameFromList + " from AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
+			throw new UnableToConsumeException ("Failed to consume " + consumeNameFromList + " from AWS S3 Bucket:" +_bucket + ", Folder: " + _folder);
 		}
 
 		logger.info("Succesfully consumed message: " + ConsumptionFileName);
 
-	return message;
+		return message;
 
 
 	}
@@ -396,10 +404,10 @@ public class PluggableS3Transport implements PluggableClient {
 
 	public String[] list() throws UnableToConsumeException {
 
-        logger.debug("Retrieving the files from folder: " + _folder);
+		logger.debug("Retrieving the files from folder: " + _folder);
 
-    	String[] list = null;
-        ArrayList<String> result = new ArrayList<String>();
+		String[] list = null;
+		ArrayList<String> result = new ArrayList<String>();
 
 
 		//get all objects of the bucket using pagination
@@ -410,17 +418,17 @@ public class PluggableS3Transport implements PluggableClient {
 		if (!_includeSubfolders) {
 			if(_folder == null || _folder.trim().isEmpty())
 				listObjectsRequest
-				.withDelimiter(SUFFIX);
+						.withDelimiter(SUFFIX);
 			else
 				listObjectsRequest
-				.withPrefix(_folder + SUFFIX)
-				.withDelimiter("/");
+						.withPrefix(_folder + SUFFIX)
+						.withDelimiter("/");
 		}
-		
+
 		ArrayList<S3ObjectSummary> S3ObjectSummaries = new ArrayList<S3ObjectSummary>();
 		ObjectListing listing;
 
-		listing = amazonS3.listObjects(listObjectsRequest);		
+		listing = amazonS3.listObjects(listObjectsRequest);
 		S3ObjectSummaries.addAll(listing.getObjectSummaries());
 
 		while(listing.isTruncated()){
@@ -435,7 +443,7 @@ public class PluggableS3Transport implements PluggableClient {
 		else
 			S3ObjectSummaries.sort(Comparator.comparing(S3ObjectSummary::getLastModified));
 
-			
+
 		//filter the list of objects and return the list of files
 		for (S3ObjectSummary objectSummary : S3ObjectSummaries) {
 
@@ -446,7 +454,7 @@ public class PluggableS3Transport implements PluggableClient {
 			else {
 
 				String splitFolderPath[] = objectSummary.getKey().split("/");
-				
+
 				String entryName = objectSummary.getKey();
 
 				//overwrite entryName if the name is a Path.
@@ -482,7 +490,7 @@ public class PluggableS3Transport implements PluggableClient {
 			logger.debug("Adding Item [" + i + "]: " + list[i]);
 		}
 
-        return list;
+		return list;
 
 	}
 
@@ -491,13 +499,13 @@ public class PluggableS3Transport implements PluggableClient {
 		if(!_deleteAfterDownload)
 			return;
 
-        logger.debug("Deleting the consumed file (" + deleteNameFromList + ") from folder: " + _folder);
+		logger.debug("Deleting the consumed file (" + deleteNameFromList + ") from folder: " + _folder);
 		String deletionFileName ="";
 		if (_folder == null || _folder.trim().isEmpty())
 			deletionFileName = deleteNameFromList;
 		else
 			deletionFileName = _folder + SUFFIX + deleteNameFromList;
-		
+
 		DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(_bucket, deletionFileName);
 		amazonS3.deleteObject(deleteObjectRequest);
 
@@ -513,19 +521,26 @@ public class PluggableS3Transport implements PluggableClient {
 			testcredentials = new BasicAWSCredentials(_accessKey, _secretKey);
 
 			testamazonS3 = AmazonS3ClientBuilder.standard()
-	                .withRegion(_region)
-	                .withCredentials(new AWSStaticCredentialsProvider(testcredentials)).build();
+					.withRegion(_region)
+					.withCredentials(new AWSStaticCredentialsProvider(testcredentials)).build();
 
-			
+
 			//get all objects of the bucket using pagination
 			ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-			.withBucketName(_bucket)
-			.withPrefix(_folder);
+					.withBucketName(_bucket)
+					.withPrefix(_folder);
 
-			testamazonS3.listObjects(listObjectsRequest);
-
-			testamazonS3.shutdown();
-
+			if (!_includeSubfolders) {
+				if(_folder == null || _folder.trim().isEmpty())
+					listObjectsRequest
+							.withDelimiter(SUFFIX);
+				else
+					listObjectsRequest
+							.withPrefix(_folder + SUFFIX)
+							.withDelimiter("/");
+			}
+			amazonS3.listObjects(listObjectsRequest);
+			disconnect();
 
 		} catch(Exception e) {
 			throw new  TransportTestException("Failed to connect to S3");
@@ -553,84 +568,80 @@ public class PluggableS3Transport implements PluggableClient {
 		List<Bucket> buckets = BucketamazonS3.listBuckets();
 		for (Bucket bucket : buckets)
 		{
-		  if (bucket.getName().equals(BucketName))
-		  {
-		    targetBucket = bucket;
-		    break;
-		  }
+			if (bucket.getName().equals(BucketName))
+			{
+				targetBucket = bucket;
+				break;
+			}
 		}
 
 		return targetBucket;
 	}
 
 
- 	//
+	//
 	//  Code from https://docs.aws.amazon.com/AmazonS3/latest/dev/llJavaUploadFile.html
 	//
 
-    public static void MultiPartUpload(PluggableMessage MPUmessage, AmazonS3 MPUamazonS3, String MPUBucket, String MPUKeyName) throws IOException {
+	public static void MultiPartUpload(PluggableMessage MPUmessage, AmazonS3 MPUamazonS3, String MPUBucket, String MPUKeyName) throws IOException {
 
 
-	    File file = MPUmessage.getData().toFile();
+		File file = MPUmessage.getData().toFile();
 
-        long contentLength = file.length();
-        long partSize = 5 * 1024 * 1024; // Set part size to 5 MB.
+		long contentLength = file.length();
+		long partSize = 5 * 1024 * 1024; // Set part size to 5 MB.
 
-        try {
+		try {
 
-            List<PartETag> partETags = new ArrayList<PartETag>();
+			List<PartETag> partETags = new ArrayList<PartETag>();
 
-            // Initiate the multipart upload.
-            InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(MPUBucket, MPUKeyName);
-            InitiateMultipartUploadResult initResponse = MPUamazonS3.initiateMultipartUpload(initRequest);
+			// Initiate the multipart upload.
+			InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(MPUBucket, MPUKeyName);
+			InitiateMultipartUploadResult initResponse = MPUamazonS3.initiateMultipartUpload(initRequest);
 
-            // Upload the file parts.
-            long filePosition = 0;
-            for (int i = 1; filePosition < contentLength; i++) {
-                // Because the last part could be less than 5 MB, adjust the part size as needed.
-                partSize = Math.min(partSize, (contentLength - filePosition));
+			// Upload the file parts.
+			long filePosition = 0;
+			for (int i = 1; filePosition < contentLength; i++) {
+				// Because the last part could be less than 5 MB, adjust the part size as needed.
+				partSize = Math.min(partSize, (contentLength - filePosition));
 
-                // Create the request to upload a part.
-                UploadPartRequest uploadRequest = new UploadPartRequest()
-                        .withBucketName(MPUBucket)
-                        .withKey(MPUKeyName)
-                        .withUploadId(initResponse.getUploadId())
-                        .withPartNumber(i)
-                        .withFileOffset(filePosition)
-                        .withFile(file)
-                        .withPartSize(partSize);
+				// Create the request to upload a part.
+				UploadPartRequest uploadRequest = new UploadPartRequest()
+						.withBucketName(MPUBucket)
+						.withKey(MPUKeyName)
+						.withUploadId(initResponse.getUploadId())
+						.withPartNumber(i)
+						.withFileOffset(filePosition)
+						.withFile(file)
+						.withPartSize(partSize);
 
-                // Upload the part and add the response's ETag to our list.
-                UploadPartResult uploadResult = MPUamazonS3.uploadPart(uploadRequest);
-                partETags.add(uploadResult.getPartETag());
+				// Upload the part and add the response's ETag to our list.
+				UploadPartResult uploadResult = MPUamazonS3.uploadPart(uploadRequest);
+				partETags.add(uploadResult.getPartETag());
 
-                filePosition += partSize;
-            }
+				filePosition += partSize;
+			}
 
-            // Complete the multipart upload.
-            CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(MPUBucket, MPUKeyName,
-                    initResponse.getUploadId(), partETags);
-            MPUamazonS3.completeMultipartUpload(compRequest);
-        }
-        catch(AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process
-            // it, so it returned an error response.
-            e.printStackTrace();
-        }
-        catch(SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-            e.printStackTrace();
-        }
+			// Complete the multipart upload.
+			CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(MPUBucket, MPUKeyName,
+					initResponse.getUploadId(), partETags);
+			MPUamazonS3.completeMultipartUpload(compRequest);
+		}
+		catch(AmazonServiceException e) {
+			// The call was transmitted successfully, but Amazon S3 couldn't process
+			// it, so it returned an error response.
+			e.printStackTrace();
+		}
+		catch(SdkClientException e) {
+			// Amazon S3 couldn't be contacted for a response, or the client
+			// couldn't parse the response from Amazon S3.
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			// Any other error during transision
+			throw new RuntimeException("Multipart upload aborted: " + e.getMessage());
+		}
 
-        file.delete();
-
-
-    }
-
-
-
-
-
-
+		file.delete();
+	}
 }

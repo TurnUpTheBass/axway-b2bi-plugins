@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="b2b-s3-plugin:jar">
+    <output-path>$PROJECT_DIR$/distributions</output-path>
+    <root id="archive" name="b2b-s3-plugin_jar.jar">
+      <element id="archive" name="b2b-s3-plugin.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/distributions/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="b2b-s3-plugin" />
+      </element>
+      <element id="library" level="project" name="lib" />
+      <element id="library" level="project" name="lib_tradingengine" />
+    </root>
+  </artifact>
+</component>

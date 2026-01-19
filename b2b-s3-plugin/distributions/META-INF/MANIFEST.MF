@@ -1,0 +1,281 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: httpcore-4.4.9.jar joda-time-2.9.7.jar httpclient-4.5.5.jar 
+ jackson-core-2.9.5.jar aws-java-sdk-1.11.339.jar jackson-databind-2.9.5
+ .jar aws-java-sdk-s3-1.11.339.jar jackson-annotations-2.9.5.jar aws-jav
+ a-sdk-core-1.11.339.jar sdk.zip axis.jar oboe.jar sipc.jar tlib.jar aqa
+ pi.jar audit.jar esapi.jar itext.jar jcapi.jar jtidy.jar trace.jar xml4
+ j.jar xss4j.jar args4j.jar docgen.jar jmsapi.jar server.jar snmp4j.jar 
+ srlzer.jar xmlsec.jar xmsapi.jar asm-9.3.jar ojdbc10.jar sipcmsg.jar en
+ tities.jar forms_rt.jar resolver.jar xml-apis.jar bootstrap.jar bsh-2.0
+ b6.jar j-interop.jar jna-4.5.1.jar jobengine.jar log4j-api.jar mina-cor
+ e.jar pnuts-1.3.jar XmlSchema.jar activation.jar castor-xml.jar cloudto
+ ols.jar ftplet-api.jar gson-2.9.1.jar log4j-core.jar mail-1.4.7.jar ser
+ ializer.jar stax-1.2.0.jar stax-utils.jar sync-agent.jar txw2-2.3.4.jar
+  xercesImpl.jar ant-1.10.11.jar ant-1.10.12.jar apiexamples.jar axis-ja
+ xrpc.jar axway-tools.jar b2bi-common.jar core.cfg_ac.jar core.cfg_mq.ja
+ r cryptix-1.0.jar dom4j-2.1.3.jar dom4j-2.1.4.jar encoder-1.2.jar jaxen
+ -2.0.0.jar jsch-0.1.55.jar jzlib-1.1.2.jar jzlib-1.1.3.jar opencsv-5.6.
+ jar qdox-1.12.1.jar sentinel-ua.jar serp-1.15.1.jar sshd-1.7.56.jar tli
+ b-server.jar xmlMDparser.jar bcpg-jdk15on.jar certificates.jar core.cfg
+ _ale.jar core.cfg_dmc.jar core.cfg_ftp.jar core.cfg_hl7.jar core.cfg_ma
+ p.jar core.cfg_sap.jar core.cfg_xml.jar hamcrest-2.2.jar hawtbuf-1.11.j
+ ar jcifs-1.2.19.jar jsr305-3.0.1.jar jsr305-3.0.2.jar lang-tag-1.6.jar 
+ log4j-1.2.15.jar msv-20050913.jar openws-1.5.4.jar wsdl4j-1.6.2.jar wsd
+ l4j-1.6.3.jar annogen-0.1.0.jar axway-defence.jar axway-x420api.jar axw
+ ay-x435api.jar commons-codec.jar connector-1.0.jar core-services.jar co
+ re.cfg_core.jar core.cfg_http.jar core.cfg_idoc.jar core.conn_jms.jar c
+ ore.dataTree.jar encoder-1.2.3.jar ha-api-3.1.13.jar hk2-api-2.6.1.jar 
+ j-interopdeps.jar jdom2-2.0.6.1.jar json-20240303.jar jsontoken-1.0.jar
+  log4j-1.2-api.jar msal4j-1.13.5.jar objenesis-2.4.jar openjpa-2.4.3.ja
+ r openjpa-3.1.2.jar policy-2.7.10.jar sap-preloader.jar stax-ex-1.8.3.j
+ ar xsdlib-2022.7.jar xsom-20140925.jar activation-1.1.jar core.cfg_emai
+ l.jar core.cfgserver.jar core.conn_java.jar crossworks-jce.jar HikariCP
+ -4.0.3.jar HikariCP-5.0.1.jar httpmime-4.5.7.jar jakarta-regexp.jar jax
+ b-api-2.3.1.jar jaxb-jxc-2.3.5.jar jaxb-xjc-2.3.6.jar jaxb-xjc-2.3.8.ja
+ r jaxws-rt-2.3.5.jar jettison-1.5.4.jar jibx-run-1.4.2.jar lombok-1.18.
+ 24.jar mex-1.5.6-impl.jar oauth-mediator.jar opensaml-2.6.4.jar stax-ap
+ i-1.0.1.jar wstx-asl-3.2.9.jar xmlbeans-5.0.3.jar xstream-1.4.20.jar ax
+ is2-adb-1.5.6.jar cache-api-1.0.0.jar classmate-1.5.1.jar core.cfg_mime
+ in.jar core.dynamicmbc.jar csrfguard-4.2.0.jar disruptor-3.4.4.jar hk2-
+ utils-2.6.1.jar httpcore-4.4.12.jar httpcore-4.4.15.jar httpcore5-5.2.4
+ .jar httpmime-4.5.14.jar jaxb-impl-2.3.6.jar jaxb-impl-2.3.8.jar jersey
+ -hk2-2.35.jar jibx-bind-1.4.2.jar json-path-2.9.0.jar kerb-core-2.0.3.j
+ ar kerb-util-2.0.3.jar libutil-3.7.1.1.jar maverick-1.7.56.jar mimepull
+ -1.9.13.jar mimepull-1.9.15.jar saaj-impl-1.5.3.jar securerelay-ssh.jar
+  servlet-api-2.5.jar slf4j-api-2.0.6.jar slf4j-api-2.0.9.jar stax2-api-
+ 4.2.1.jar tika-core-2.7.0.jar woden-api-1.0M9.jar xml-apis-1.4.01.jar z
+ ookeeper-3.8.3.jar axis2-jibx-1.5.6.jar axis2-json-1.5.6.jar axis2-saaj
+ -1.5.6.jar axway-b2biclient.jar cm-sso-agent-lib.jar commons-dbcp-1.4.j
+ ar commons-io-2.8.0.jar commons-lang-2.6.jar commons-pool-1.6.jar commo
+ ns-vfs2-2.2.jar content-type-2.2.jar core.cfg_mimeout.jar core.copilot.
+ cfg.jar ehcache-2.10.9.2.jar gnu-regexp-1.1.4.jar guava-32.0.1-jre.jar 
+ hamcrest-all-1.3.jar interchange-help.jar jakarta.el-3.0.4.jar javax.ma
+ il-1.6.2.jar joda-time-2.12.5.jar json-smart-2.4.9.jar jtable-26.12.0-8
+ .jar jtimer-26.12.0-8.jar log4j-api-2.22.0.jar log4j-jcl-2.22.0.jar slf
+ 4j-api-1.7.26.jar xercesImpl-2.9.0.jar xmltooling-1.4.4.jar annotations
+ -1.3.2.jar annotations-3.0.1.jar axis2-corba-1.5.6.jar axis2-jaxws-1.5.
+ 6.jar commons-26.12.0-8.jar commons-cli-1.3.1.jar commons-cli-1.5.0.jar
+  commons-io-2.11.0.jar commons-io-2.14.0.jar commons-net-1.4.1.jar comm
+ ons-net-3.9.0.jar connector-api-1.5.jar core.cfg_acoracle.jar core.cfg_
+ sentinel.jar folder-sync-agent.jar hadoop-auth-3.3.3.jar hadoop-hdfs-3.
+ 3.3.jar hamcrest-core-1.1.jar hamcrest-core-2.2.jar hk2-locator-2.6.1.j
+ ar httpclient-4.5.13.jar httpclient5-5.3.1.jar interchange-pesit.jar is
+ orelax-20050913.jar jaxb-core-2.3.0.1.jar jaxws-tools-2.3.5.jar jersey-
+ hk2-2.39.1.jar libutil-3.10.0-38.jar log4j-core-2.22.0.jar metering-ser
+ vices.jar metrics-jvm-3.0.1.jar metrics-jvm-3.0.2.jar modelmapper-3.1.1
+ .jar postgresql-42.7.3.jar spring-jcl-5.3.31.jar sshd-proxy-1.7.56.jar 
+ xercesImpl-2.12.0.jar xercesImpl-2.12.2.jar amqp-client-5.20.0.jar anno
+ tations-16.0.3.jar api-i18n-1.0.0-M31.jar api-util-1.0.0-M31.jar axis-1
+ .4.0-AXWAY-1.jar axis-1.4.0-AXWAY-3.jar axis2-jaxbri-1.5.6.jar axis2-sp
+ ring-1.5.6.jar common-api-3.7.1.1.jar commons-codec-1.15.jar commons-je
+ xl-2.1.1.jar commons-pool-1.5.4.jar commons-vfs2-2.9.0.jar ehcache-core
+ -2.5.1.jar FastInfoset-1.2.18.jar httpcore5-h2-5.2.4.jar iaik_jce_full-
+ 5.61.jar interchange-server.jar jakarta.mail-1.6.7.jar javax.el-3.0.1-b
+ 12.jar jaxb-runtime-2.3.4.jar jersey-client-2.35.jar jersey-common-2.35
+ .jar jersey-server-2.35.jar jul-to-slf4j-2.0.9.jar LatencyUtils-2.0.3.j
+ ar lucene-core-8.11.2.jar metrics-core-3.0.1.jar metrics-core-3.0.2.jar
+  metrics-jvm-4.2.18.jar oauth2-client-2.35.jar reactor-core-3.6.4.jar r
+ eflections-0.9.12.jar spring-core-5.3.31.jar unirest-java-1.4.9.jar axi
+ s2-codegen-1.5.6.jar axway-defence-2.8.4.jar axway-tools-1.4.0-1.jar bc
+ pkix-jdk18on-1.76.jar bcprov-jdk18on-1.76.jar bcutil-jdk18on-1.76.jar c
+ hecker-qual-3.33.0.jar checker-qual-3.42.0.jar commons-dbcp2-2.9.0.jar 
+ commons-jexl3-3.2.1.jar commons-logging-1.2.jar commons-text-1.11.0.jar
+  core.copilot.client.jar disruptor-4.0.0.RC1.jar ehcache-core-2.6.11.ja
+ r failureaccess-1.0.1.jar hadoop-client-3.3.3.jar hadoop-common-3.3.3.j
+ ar HdrHistogram-2.1.12.jar httpcore-nio-4.4.12.jar interchange-rest-ql.
+ jar interchange-threads.jar interchange-yaarest.jar jackson-core-2.13.4
+ .jar javassist-3.26.0-GA.jar javassist-3.29.0-GA.jar juniqueid-26.12.0-
+ 8.jar maverick-nio-1.7.56.jar metrics-core-4.2.18.jar provisioningrunti
+ me.jar rampart-trust-1.5.2.jar simpleclient-0.16.0.jar spring-beans-5.3
+ .31.jar streambuffer-1.5.10.jar woodstox-core-6.4.0.jar xmlParserAPIs-2
+ .6.2.jar ant-launcher-1.10.11.jar ant-launcher-1.10.12.jar antlr4-runti
+ me-4.9.3.jar axis2-metadata-1.5.6.jar axis2-xmlbeans-1.5.6.jar axway-cu
+ stom-classes.jar bonecp-0.8.0.RELEASE.jar cloudtools-26.12.0-8.jar com.
+ ibm.mq.allclient.jar commons-codec-1.16.1.jar commons-lang3-3.12.0.jar 
+ commons-lang3-3.14.0.jar commons-pool2-2.10.0.jar commons-pool2-2.11.1.
+ jar curator-client-5.2.1.jar gmbal-api-only-4.0.3.jar interchange-pmser
+ ver.jar interchange-rest-jpa.jar jakarta.el-api-3.0.3.jar jakarta.injec
+ t-2.6.1.jar javax.mail-api-1.6.2.jar jcip-annotations-1.0.jar jersey-cl
+ ient-2.39.1.jar jersey-common-2.39.1.jar jersey-server-2.39.1.jar jradi
+ us-client-2.0.0.jar log4j-1.2-api-2.22.0.jar management-api-3.2.3.jar m
+ averick-slf4j-2.0.8.jar nimbus-jose-jwt-9.22.jar oauth2-oidc-sdk-9.35.j
+ ar sentinel-common-core.jar sentinel-ua-3.39.0-2.jar shedlock-core-4.46
+ .0.jar sshd-assembly-1.7.56.jar woden-impl-dom-1.0M9.jar zookeeper-jute
+ -3.8.3.jar accessors-smart-2.4.9.jar axis2-java2wsdl-1.5.6.jar b2bi-com
+ mon-26.12.0-8.jar commons-discovery-0.2.jar commons-discovery-0.5.jar c
+ ommons-logging-1.1.1.jar commons-logging-1.3.0.jar curator-recipes-5.2.
+ 1.jar hadoop-yarn-api-3.3.3.jar httpasyncclient-4.1.4.jar interchange-c
+ ontainer.jar jakarta.jws-api-2.1.0.jar javax.ws.rs-api-2.1.1.jar jcl-ov
+ er-slf4j-1.7.28.jar lucene-queries-8.11.2.jar lucene-sandbox-8.11.2.jar
+  maverick-agent-1.7.56.jar micrometer-core-1.9.5.jar xbean-asm6-shaded-
+ 4.8.jar activemq-client-5.16.7.jar api-asn1-api-1.0.0-M31.jar api-asn1-
+ ber-1.0.0-M31.jar axis2-ant-plugin-1.5.6.jar axis2-clustering-1.5.6.jar
+  axis2-mtompolicy-1.5.6.jar commons-httpclient-3.1.jar core.cfg_tidserv
+ ertask.jar j2objc-annotations-2.8.jar jcip-annotations-1.0-1.jar maveri
+ ck-common-1.4.27.jar metering-collector-api.jar metrics-graphite-3.0.1.
+ jar metrics-graphite-3.0.2.jar reactive-streams-1.0.4.jar xbean-asm8-sh
+ aded-4.17.jar axis2-adb-codegen-1.5.6.jar axis2-fastinfoset-1.5.6.jar a
+ xway-b2biclient-1.0_R5.jar bcprov-bouncycastle-146.jar commons-beanutil
+ s-1.9.4.jar curator-framework-5.2.1.jar jakarta.ws.rs-api-2.1.6.jar jav
+ ax.servlet-api-3.1.0.jar javax.servlet.jsp-2.3.4.jar log4j-slf4j-impl-2
+ .22.0.jar mssql-jdbc-11.2.2.jre11.jar netty-all-4.1.100.Final.jar netty
+ -all-4.1.109.Final.jar sshd-nativeshell-1.7.56.jar api-ldap-model-1.0.0
+ -M31.jar commons-collections4-4.4.jar hadoop-annotations-3.3.3.jar hado
+ op-hdfs-client-3.3.3.jar hadoop-yarn-client-3.3.3.jar hadoop-yarn-commo
+ n-3.3.3.jar interchange-exportimport.jar jakarta.activation-1.2.2.jar j
+ akarta.xml.ws-api-2.3.3.jar junixsocket-common-2.4.0.jar log4j-slf4j2-i
+ mpl-2.22.0.jar maverick-assembly-1.7.56.jar netty-codec-4.1.94.Final.ja
+ r opentelemetry-api-1.34.1.jar protobuf-java-4.0.0-rc-2.jar relaxngData
+ type-20020414.jar relaxngDatatype-20050913.jar sshd-virtualshell-1.7.56
+ .jar webtrader-ds-core-common.jar axis-jaxrpc-1.4.0-AXWAY-1.jar axis-ja
+ xrpc-1.4.0-AXWAY-3.jar commons-collections-3.2.2.jar commons-configurat
+ ion-1.8.jar commons-interchange-apiv2.jar core.cfg_tpmclassactivity.jar
+  curator-x-discovery-5.2.1.jar geronimo-jms_1.1_spec-1.1.jar geronimo-j
+ pa_2.0_spec-1.1.jar geronimo-jpa_2.2_spec-1.1.jar geronimo-jta_1.1_spec
+ -1.1.jar hadoop-shaded-guava-1.1.1.jar jackrabbit-webdav-2.14.10.jar ja
+ ckson-databind-2.13.4.2.jar jackson-jaxrs-base-2.13.4.jar javax.persist
+ ence-api-2.2.jar jboss-logging-3.4.1.Final.jar jetty-io-9.4.53.v2023100
+ 9.jar lucene-queryparser-8.11.2.jar metering-collector-client.jar netty
+ -buffer-4.1.94.Final.jar netty-codec-4.1.100.Final.jar netty-codec-4.1.
+ 109.Final.jar netty-common-4.1.94.Final.jar not-yet-commons-ssl-0.3.9.j
+ ar sentinel-common-transport.jar core.cfg_fileclassactivity.jar core.co
+ nfig_broadcastagent.jar geronimo-j2ee_1.4_spec-1.0.jar jackson-annotati
+ ons-2.13.4.jar jakarta.xml.bind-api-2.3.3.jar jakarta.xml.soap-api-1.4.
+ 2.jar javax.activation-api-1.2.0.jar jaxb2-basics-runtime-0.5.0.jar jca
+ 15_sap_adapter-3.1.0-39.jar jetty-xml-9.4.53.v20231009.jar lettuce-core
+ -6.3.2.RELEASE.jar netty-buffer-4.1.100.Final.jar netty-buffer-4.1.109.
+ Final.jar netty-common-4.1.100.Final.jar netty-common-4.1.109.Final.jar
+  org.eclipse.jdt.core-3.7.1.jar sentinel-common-deployment.jar simplecl
+ ient_common-0.15.0.jar webtrader-ds-core-exporter.jar audience-annotati
+ ons-0.12.0.jar axway-custom-classes-restv2.jar geronimo-jms_1.1_spec-1.
+ 1.1.jar geronimo-jta_1.1_spec-1.1.1.jar javax.servlet.jsp-api-2.3.3.jar
+  jersey-bean-validation-2.35.jar jersey-media-multipart-2.35.jar jetty-
+ http-9.4.53.v20231009.jar jetty-util-9.4.53.v20231009.jar netty-handler
+ -4.1.100.Final.jar netty-handler-4.1.109.Final.jar netty-resolver-4.1.9
+ 4.Final.jar osgi-resource-locator-1.0.3.jar securerelay-program-commons
+ .jar simpleclient_servlet-0.16.0.jar aopalliance-repackaged-2.6.1.jar b
+ 2bi-core-export-pmserverapi.jar backport-util-concurrent-3.1.jar common
+ s-configuration2-2.9.0.jar core.copilot.activitymonitor.jar jackson-dat
+ atype-jdk8-2.13.4.jar jakarta.activation-api-1.2.1.jar jakarta.annotati
+ on-api-1.3.5.jar jakarta.validation-api-2.0.2.jar javax.servlet.jsp.jst
+ l-1.2.5.jar jersey-entity-filtering-2.35.jar netty-resolver-4.1.100.Fin
+ al.jar netty-resolver-4.1.109.Final.jar netty-transport-4.1.94.Final.ja
+ r opentelemetry-context-1.34.1.jar b2bi.webedipluggabletransport.jar co
+ mmons-configuration2-2.10.1.jar commons-sso-agent-lib-1.1.0-2.jar htrac
+ e-core4-4.2.0-incubating.jar integrator-javacore-cfgserver.jar intercha
+ nge-connectionmanager.jar interchange-framework-acf-api.jar istack-comm
+ ons-runtime-3.0.12.jar jersey-media-multipart-2.39.1.jar jetty-client-9
+ .4.53.v20231009.jar jetty-deploy-9.4.53.v20231009.jar jetty-server-9.4.
+ 53.v20231009.jar jetty-webapp-9.4.53.v20231009.jar netty-codec-dns-4.1.
+ 100.Final.jar netty-codec-dns-4.1.109.Final.jar netty-codec-http-4.1.94
+ .Final.jar netty-codec-xml-4.1.100.Final.jar netty-codec-xml-4.1.109.Fi
+ nal.jar netty-transport-4.1.100.Final.jar netty-transport-4.1.109.Final
+ .jar sentinel-common-core-3.39.0-2.jar com.axway.interchange.sso.saml.j
+ ar com.sun.el-2.2.0.v201303151357.jar error_prone_annotations-2.18.0.ja
+ r interchange-framework-acf-node.jar jackrabbit-jcr-commons-2.14.10.jar
+  jackson-datatype-jsr310-2.13.4.jar jersey-entity-filtering-2.39.1.jar 
+ jersey-media-json-jackson-2.35.jar jetty-servlet-9.4.53.v20231009.jar l
+ ucene-analyzers-common-8.11.2.jar netty-codec-http-4.1.100.Final.jar ne
+ tty-codec-http-4.1.109.Final.jar netty-codec-mqtt-4.1.100.Final.jar net
+ ty-codec-mqtt-4.1.109.Final.jar netty-codec-smtp-4.1.100.Final.jar nett
+ y-codec-smtp-4.1.109.Final.jar securerelay-program-maembedded.jar senti
+ nel-common-circularbuffer.jar simpleclient_dropwizard-0.16.0.jar webtra
+ der-ds-core-b2bimigraion.jar webtrader-ds-core-storage-hdfs.jar hadoop-
+ yarn-server-common-3.3.3.jar hibernate-validator-6.2.0.Final.jar jersey
+ -container-servlet-2.39.1.jar jetty-security-9.4.53.v20231009.jar junix
+ socket-native-common-2.4.0.jar maverick-dynamic-forward-1.7.56.jar nett
+ y-codec-http2-4.1.100.Final.jar netty-codec-http2-4.1.109.Final.jar net
+ ty-codec-redis-4.1.100.Final.jar netty-codec-redis-4.1.109.Final.jar ne
+ tty-codec-socks-4.1.100.Final.jar netty-codec-socks-4.1.109.Final.jar n
+ etty-codec-stomp-4.1.100.Final.jar netty-codec-stomp-4.1.109.Final.jar 
+ sentinel-common-server-3.39.0-2.jar simpleclient_tracer_otel-0.16.0.jar
+  b2bi-core-export-kernelserverapi.jar b2bx.migrationpluggabletransport.
+ jar geronimo-annotation_1.0_spec-1.1.jar geronimo-stax-api_1.0_spec-1.0
+ .1.jar hadoop-shaded-protobuf_3_7-1.1.1.jar integrator-javamodules-boot
+ strap.jar jersey-container-jetty-http-2.35.jar jersey-media-json-jackso
+ n-2.39.1.jar jetty-util-ajax-9.4.53.v20231009.jar netty-resolver-dns-4.
+ 1.100.Final.jar netty-resolver-dns-4.1.109.Final.jar csrfguard-extensio
+ n-session-4.2.0.jar enunciate-core-annotations-2.14.0.jar hadoop-mapred
+ uce-client-app-3.3.3.jar integrator-javacore-hme-26.12.0-8.jar intercha
+ nge-config-promotion-tool.jar jersey-declarative-linking-2.39.1.jar net
+ ty-codec-haproxy-4.1.100.Final.jar netty-codec-haproxy-4.1.109.Final.ja
+ r netty-handler-proxy-4.1.100.Final.jar netty-handler-proxy-4.1.109.Fin
+ al.jar netty-transport-udt-4.1.100.Final.jar netty-transport-udt-4.1.10
+ 9.Final.jar simpleclient_tracer_common-0.16.0.jar hadoop-mapreduce-clie
+ nt-core-3.3.3.jar jackson-jaxrs-json-provider-2.13.4.jar jersey-contain
+ er-servlet-core-2.35.jar netty-codec-memcache-4.1.100.Final.jar netty-c
+ odec-memcache-4.1.109.Final.jar netty-transport-rxtx-4.1.100.Final.jar 
+ netty-transport-rxtx-4.1.109.Final.jar netty-transport-sctp-4.1.100.Fin
+ al.jar netty-transport-sctp-4.1.109.Final.jar simpleclient_servlet_comm
+ on-0.16.0.jar interchange-framework-acf-executive.jar jetty-continuatio
+ n-9.4.42.v20210604.jar jetty-continuation-9.4.53.v20231009.jar release-
+ documentation-2.3.5-docbook.zip sentinel-common-deployment-3.39.0-2.jar
+  hadoop-mapreduce-client-common-3.3.3.jar integrator-javacore-srlzer-26
+ .12.0-8.jar interchange-resources-javaee7-schema.zip jersey-container-s
+ ervlet-core-2.39.1.jar micrometer-registry-prometheus-1.9.5.jar netty-h
+ andler-ssl-ocsp-4.1.100.Final.jar netty-handler-ssl-ocsp-4.1.109.Final.
+ jar axis2-dependencies-neethi-2.0.5-AXWAY.jar axis2-dependencies-wss4j-
+ 1.5.12-AXWAY.jar hadoop-mapreduce-client-shuffle-3.3.3.jar interchange-
+ resources-servlet-api-2.3.zip jackson-module-parameter-names-2.13.4.jar
+  simpleclient_tracer_otel_agent-0.16.0.jar webservices-framework-webser
+ vicescore.jar integrator-javamodules-swift-26.12.0-8.jar jackson-module
+ -jaxb-annotations-2.13.4.jar shedlock-provider-jdbc-internal-4.46.0.jar
+  geronimo-j2ee-management_1.1_spec-1.0.1.jar hadoop-mapreduce-client-jo
+ bclient-3.3.3.jar integrator-javacore-cfgserver-26.12.0-8.jar integrato
+ r-javamodules-importexport-api.jar interchange-connectionmanager-26.12.
+ 0-8.jar interchange-framework-acf-api-26.12.0-8.jar sentinel-common-cir
+ cularbuffer-3.39.0-2.jar integrator-javacore-mdimporter-26.12.0-8.jar i
+ ntegrator-javamodules-samples-26.12.0-8.jar axis2-dependencies-axiom-ap
+ i-1.2.12-AXWAY.jar axis2-dependencies-axiom-dom-1.2.12-AXWAY.jar integr
+ ator-javamodules-importexport-share.jar netty-transport-native-epoll-4.
+ 1.94.Final.jar axis2-dependencies-axiom-impl-1.2.12-AXWAY.jar integrato
+ r-javamodules-bootstrap-26.12.0-8.jar integrator-javamodules-importexpo
+ rt-loader.jar netty-transport-classes-epoll-4.1.94.Final.jar axis2-depe
+ ndencies-axis2-kernel-1.5.6-AXWAY.jar axis2-dependencies-rampart-core-1
+ .5.2-AXWAY.jar integrator-javamodules-coretasksjavaclients.jar integrat
+ or-javamodules-extratools-26.12.0-8.jar netty-transport-classes-epoll-4
+ .1.100.Final.jar netty-transport-classes-epoll-4.1.109.Final.jar org.ap
+ ache.servicemix.bundles.antlr-2.7.7_5.jar integrator-javacore-copilot-c
+ lient-26.12.0-8.jar integrator-javamodules-sap-adapter-26.12.0-8.jar in
+ tegrator-javamodules-sap-runtime-26.12.0-8.jar netty-transport-classes-
+ kqueue-4.1.100.Final.jar netty-transport-classes-kqueue-4.1.109.Final.j
+ ar axis2-dependencies-rampart-policy-1.5.2-AXWAY.jar axis2-dependencies
+ -sandesha2-core-1.6.0-AXWAY.jar integrator-javamodules-restclientapi-26
+ .12.0-8.jar integrator-javamodules-sap-preloader-26.12.0-8.jar netty-re
+ solver-dns-classes-macos-4.1.100.Final.jar netty-resolver-dns-classes-m
+ acos-4.1.109.Final.jar integrator-javamodules-sap-mdimporter-26.12.0-8.
+ jar integrator-javamodules-timeouttrigger-26.12.0-8.jar netty-transport
+ -native-unix-common-4.1.94.Final.jar opentelemetry-instrumentation-anno
+ tations-2.0.0.jar org.apache.jasper.glassfish-2.1.0.v201110031002.jar i
+ ntegrator-javamodules-b2biwsmapbroker-26.12.0-8.jar netty-transport-nat
+ ive-unix-common-4.1.100.Final.jar netty-transport-native-unix-common-4.
+ 1.109.Final.jar integrator-javamodules-importexport-api-26.12.0-8.jar i
+ ntegrator-javamodules-dmlmapperjava-api-26.12.0-8.jar integrator-javamo
+ dules-coreservices-queue-26.12.0-8.jar integrator-javamodules-developme
+ ntkit-api-26.12.0-8.jar integrator-javamodules-importexport-share-26.12
+ .0-8.jar integrator-javamodules-importexport-server-26.12.0-8.jar integ
+ rator-javacore-copilot-activitymonitor-26.12.0-8.jar integrator-javamod
+ ules-coretasksjavaclients-26.12.0-8.jar integrator-javamodules-importex
+ port-userapi-26.12.0-8.jar integrator-javamodules-xmlsplitterenveloper-
+ 26.12.0-8.jar integrator-javamodules-dmlmapperjava-runtime-26.12.0-8.ja
+ r integrator-javamodules-dmlmapperjava-samples-26.12.0-8.jar netty-tran
+ sport-native-kqueue-4.1.100.Final-osx-x86_64.jar netty-transport-native
+ -kqueue-4.1.109.Final-osx-x86_64.jar integrator-javamodules-coreservice
+ s-framework-26.12.0-8.jar integrator-javamodules-developmentkit-runtime
+ -26.12.0-8.jar integrator-javamodules-internaljavacomponents-26.12.0-8.
+ jar integrator-javamodules-xmlvalidatorclassifier-26.12.0-8.jar netty-t
+ ransport-native-epoll-4.1.100.Final-linux-x86_64.jar netty-transport-na
+ tive-epoll-4.1.109.Final-linux-x86_64.jar netty-resolver-dns-native-mac
+ os-4.1.100.Final-osx-x86_64.jar netty-resolver-dns-native-macos-4.1.109
+ .Final-osx-x86_64.jar netty-transport-native-epoll-4.1.109.Final-linux-
+ riscv64.jar netty-transport-native-kqueue-4.1.100.Final-osx-aarch_64.ja
+ r netty-transport-native-kqueue-4.1.109.Final-osx-aarch_64.jar integrat
+ or-javamodules-developmentkit-simulator-26.12.0-8.jar netty-transport-n
+ ative-epoll-4.1.100.Final-linux-aarch_64.jar netty-transport-native-epo
+ ll-4.1.109.Final-linux-aarch_64.jar org.apache.taglibs.standard.glassfi
+ sh-1.2.0.v201112081803.jar listenablefuture-9999.0-empty-to-avoid-confl
+ ict-with-guava.jar netty-resolver-dns-native-macos-4.1.100.Final-osx-aa
+ rch_64.jar netty-resolver-dns-native-macos-4.1.109.Final-osx-aarch_64.j
+ ar
+

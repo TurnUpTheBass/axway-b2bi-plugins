@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/Axway/B2Bi231/interchange-server.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/B2Bi231/log4j-1.2-api.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/B2Bi231/log4j-core.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/B2Bi231/log4j-api.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/B2Bi231/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/jackson-annotations-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/jackson-core-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/jackson-databind-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/aws-java-sdk-s3-1.11.339.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/aws-java-sdk-core-1.11.339.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/httpcore-4.4.9.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/httpclient-4.5.5.jar"/>
-	<classpathentry kind="lib" path="D:/Axway/Customizations/S3/joda-time-2.9.7.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/B2Bi/interchange-server.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/B2Bi/log4j-1.2-api.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/B2Bi/log4j-core.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/B2Bi/log4j-api.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/B2Bi/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/jackson-annotations-2.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/jackson-core-2.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/jackson-databind-2.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/aws-java-sdk-s3-1.11.339.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/aws-java-sdk-core-1.11.339.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/httpcore-4.4.9.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/httpclient-4.5.5.jar"/>
+	<classpathentry kind="lib" path="C:/Axway/Customizations/S3/joda-time-2.9.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

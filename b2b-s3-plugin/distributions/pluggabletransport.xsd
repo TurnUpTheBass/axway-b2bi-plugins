@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Clint Foster (Cyclone Commerce) -->
+<!-- This schema describes the pluggabletransports.xml file which defines custom transports for use by the trading engine. -->
+<!-- The UI uses the pluggabletransports.xml file to obtain a list of available transports and properties required by each. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+        <xs:element name="TransportDefinitions">
+                <xs:annotation>
+                        <xs:documentation>Definitions of pluggable (user-defined) transports for use by the trading engine.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                        <xs:sequence>
+                                <xs:element name="TransportDefinition" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:annotation>
+                                                <xs:documentation>Definition of an individual pluggable transport. Note that multiple transports can be defined which point to the same implementation class.</xs:documentation>
+                                        </xs:annotation>
+                                        <xs:complexType>
+                                                <xs:sequence>
+                                                        <xs:element name="Class" type="xs:string">
+                                                                <xs:annotation>
+                                                                        <xs:documentation>User's implementation class for this transport, e.g. com.fred.transport.Flurp</xs:documentation>
+                                                                </xs:annotation>
+                                                        </xs:element>
+                                                        <xs:element name="Usages">
+                                                                <xs:annotation>
+                                                                        <xs:documentation>Contains information about how this transport can be used.</xs:documentation>
+                                                                </xs:annotation>
+                                                                <xs:complexType>
+                                                                        <xs:sequence>
+                                                                                <xs:annotation>
+                                                                                        <xs:documentation>At least one of the usage elements (Produce or Consume) must be specified.</xs:documentation>
+                                                                                </xs:annotation>
+                                                                                <xs:element name="Produce" minOccurs="0">
+                                                                                        <xs:annotation>
+                                                                                                <xs:documentation>List of usageTypes this transport can produce messages to.</xs:documentation>
+                                                                                        </xs:annotation>
+                                                                                        <xs:complexType>
+                                                                                                <xs:sequence>
+                                                                                                        <xs:element name="Integration" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS1Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS2Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS3Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="ASxTrading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="EmailTrading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="RawTrading" type="usageType" minOccurs="0"/>
+                                                                                                </xs:sequence>
+                                                                                        </xs:complexType>
+                                                                                </xs:element>
+                                                                                <xs:element name="Consume" minOccurs="0">
+                                                                                        <xs:annotation>
+                                                                                                <xs:documentation>List of usageTypes this transport can consume messages from.</xs:documentation>
+                                                                                        </xs:annotation>
+                                                                                        <xs:complexType>
+                                                                                                <xs:sequence>
+                                                                                                        <xs:element name="Integration" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS1Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS2Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="AS3Trading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="ASxTrading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="EmailTrading" type="usageType" minOccurs="0"/>
+                                                                                                        <xs:element name="RawTrading" type="usageType" minOccurs="0"/>
+                                                                                                </xs:sequence>
+                                                                                        </xs:complexType>
+                                                                                </xs:element>
+                                                                        </xs:sequence>
+                                                                </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="SettingDefinitions" minOccurs="0">
+                                                                <xs:annotation>
+                                                                        <xs:documentation>Optional list of definitions for settings which the user will be prompted to enter values for when creating this transport in the UI.</xs:documentation>
+                                                                </xs:annotation>
+                                                                <xs:complexType>
+                                                                        <xs:sequence>
+                                                                                <xs:element name="SettingDefinition" minOccurs="0" maxOccurs="unbounded">
+                                                                                        <xs:annotation>
+                                                                                                <xs:documentation>Defines setting string to be passed to the implementation class when it is created, e.g. a port number.</xs:documentation>
+                                                                                        </xs:annotation>
+                                                                                        <xs:complexType>
+                                                                                                <xs:sequence>
+                                                                                                        <xs:element name="SelectionList" minOccurs="0">
+                                                                                                                <xs:annotation>
+                                                                                                                        <xs:documentation>If present, indicates that the UI should provide the user with a drop-down list of values for this setting instead of a plain entry field.</xs:documentation>
+                                                                                                                </xs:annotation>
+                                                                                                                <xs:complexType>
+                                                                                                                        <xs:sequence>
+                                                                                                                                <xs:element name="SelectionItem" type="xs:string" maxOccurs="unbounded">
+                                                                                                                                        <xs:annotation>
+                                                                                                                                                <xs:documentation>String to be placed in the drop-down list of values that the user can select for this setting. An item with no text can be included to indicate that a blank value is allowed.</xs:documentation>
+                                                                                                                                        </xs:annotation>
+                                                                                                                                </xs:element>
+                                                                                                                        </xs:sequence>
+                                                                                                                </xs:complexType>
+                                                                                                        </xs:element>
+                                                                                                </xs:sequence>
+                                                                                                <xs:attribute name="name" type="xs:string" use="required">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Name of the setting which will displayed in the UI. This name will also be used as the key in the HashMap of settings passed to the transport. No two settings can have the same name.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="description" type="xs:string" use="optional">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Optional description which the UI will display to help the user understand how to fill out this setting.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="type" type="entryType" use="optional" default="string">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>The type of data the user will be allowed to enter for this setting.  See the annotations for the entryType simpleType for more information.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="min" type="xs:long" use="optional">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>If the type is number, this is the minimum allowed value which the user can enter in the UI, e.g. 0.  Currently this attribute is ignored for other types.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="max" type="xs:long" use="optional">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>If the type is number, this is the maximum allowed value which the user can enter in the UI, e.g. 0.  Currently this attribute is ignored for other types.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="defaultValue" type="xs:string" use="optional">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Default value which will be shown in the UI the first time it prompts for this setting.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="required" type="xs:boolean" use="optional" default="false">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Specifies whether the UI will require the user to specify a value for this setting.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="encrypt" type="xs:boolean" use="optional" default="false">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Specifies whether this setting's value will be encrypted when written to the database.  Used for sensitive data such as passwords.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="mask" type="xs:boolean" use="optional" default="false">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Specifies whether the UI should mask out the value of this setting instead of displaying it on the screen. Used for sensitive data such as passwords.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                        </xs:complexType>
+                                                                                </xs:element>
+                                                                        </xs:sequence>
+                                                                </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="ConstantSettings" minOccurs="0">
+                                                                <xs:annotation>
+                                                                        <xs:documentation>Optional list of settings whose values are supplied here in the pluggable transports configuration file (not in the UI).  Hence the name "constant" settings.</xs:documentation>
+                                                                </xs:annotation>
+                                                                <xs:complexType>
+                                                                        <xs:sequence>
+                                                                                <xs:element name="ConstantSetting" minOccurs="0" maxOccurs="unbounded">
+                                                                                        <xs:annotation>
+                                                                                                <xs:documentation>Setting which will be set here (not in the UI) and passed to the implementation class when it is created, e.g. a queue name.</xs:documentation>
+                                                                                        </xs:annotation>
+                                                                                        <xs:complexType>
+                                                                                                <xs:attribute name="name" type="xs:string" use="required">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Name of the constant setting, e.g. MAX_CONNECTIONS.  Each constant setting must have a unique name.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="description" type="xs:string" use="optional">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Optional description which the UI will display to help the user understand what this constant setting is used for.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="value" type="xs:string" use="required">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Value of the constant setting.</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                                <xs:attribute name="visible" type="xs:boolean" use="optional" default="true">
+                                                                                                        <xs:annotation>
+                                                                                                                <xs:documentation>Indicates whether this constant setting should be visible to the user in the UI.  (Constant settings are never changeable in the UI.  Setting this to true simple makes the constant setting visible in the UI.)</xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                </xs:attribute>
+                                                                                        </xs:complexType>
+                                                                                </xs:element>
+                                                                        </xs:sequence>
+                                                                </xs:complexType>
+                                                        </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="name" type="xs:string" use="required">
+                                                        <xs:annotation>
+                                                                <xs:documentation>Name to be displayed in the UI wizard for selecting a transport.  This name will be displayed along with built-in transport names such as "Ftp", "File system", etc.  For consistency with existing names, use an initial capital letter, and no period at the end.</xs:documentation>
+                                                        </xs:annotation>
+                                                </xs:attribute>
+                                                <xs:attribute name="description" type="xs:string" use="optional">
+                                                        <xs:annotation>
+                                                                <xs:documentation>Text to be displayed in the UI to describe this transport.  For example, for a file-system based transport you might say, "This transport sends and receives files to and from the file system."</xs:documentation>
+                                                        </xs:annotation>
+                                                </xs:attribute>
+                                                <xs:attribute name="available" type="xs:boolean" use="optional" default="true">
+                                                        <xs:annotation>
+                                                                <xs:documentation>Specifies whether this transport is available in the UI.  Specify false to prevent it from being displayed in the list of possible transports.</xs:documentation>
+                                                        </xs:annotation>
+                                                </xs:attribute>
+                                        </xs:complexType>
+                                </xs:element>
+                        </xs:sequence>
+                </xs:complexType>
+        </xs:element>
+        <xs:simpleType name="entryType">
+                <xs:annotation>
+                        <xs:documentation>Defines an entry field type in the UI.</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="number">
+                                <xs:annotation>
+                                        <xs:documentation>A positive or negative whole number (or 0).</xs:documentation>
+                                </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="string">
+                                <xs:annotation>
+                                        <xs:documentation>A string which will be rendered in a simple entry field in the UI.</xs:documentation>
+                                </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="multiString">
+                                <xs:annotation>
+                                        <xs:documentation>A set of strings which will be rendered in a multi-line entry field in the UI.</xs:documentation>
+                                </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="CLOB">
+                                <xs:annotation>
+                                        <xs:documentation>A set of strings which will be stored in a Character Large Objects</xs:documentation>
+                                </xs:annotation>
+                        </xs:enumeration>
+                </xs:restriction>
+        </xs:simpleType>
+        <xs:complexType name="usageType">
+                <xs:annotation>
+                        <xs:documentation>Base type for Produce or Consume subelements, e.g. Integration, AS1Protocol, etc.</xs:documentation>
+                </xs:annotation>
+        </xs:complexType>
+</xs:schema>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib_tradingengine">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/distributions/s3-plugin/lib_tradingengine" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/distributions/s3-plugin/lib_tradingengine" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/distributions/s3-plugin/lib_tradingengine" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/distributions/s3-plugin/lib_tradingengine" recursive="false" type="SOURCES" />
+  </library>
+</component>
